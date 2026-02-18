@@ -8,9 +8,9 @@ export class UsersController {
     constructor(private userService : UsersService){}
 
     @Post("/create")
-    createUser(@Body() body : CreateUserDTO){
-        this.userService.insertUser(body)
-        console.log(body)
+    createUser(@Body() user : CreateUserDTO){
+        this.userService.insertUser(user)
+        console.log(user)
     }
 
     @Get("/getAll")
