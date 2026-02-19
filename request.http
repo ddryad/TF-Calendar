@@ -1,0 +1,11 @@
+###créer user
+POST http://localhost:3005/users/create
+content-type: application/json
+
+{
+    "email" : "email@xyz.com",
+    "password" : "abc123"
+}
+
+###trouver tous les users
+GET  http://localhost:3005/users/getAll
