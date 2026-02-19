@@ -1,8 +1,26 @@
 ###créer user
-POST http://localhost:3000/users/create
+POST http://localhost:3000/users/signup
+content-type: application/json
+
+{
+    "email" : "email123qr123154151@xyz.com",
+    "password" : "abc123"
+}
+
+### GET ONE BY ID
+GET http://localhost:3000/users/1
+
+### GET ALL USers
+GET http://localhost:3000/users/getAll
+
+###update 
+PATCH http://localhost:3000/users/1
 content-type: application/json
 
 {
     "email" : "email@xyz.com",
     "password" : "abc123"
 }
+
+### Delete USer par ID
+DELETE http://localhost:3000/users/1
