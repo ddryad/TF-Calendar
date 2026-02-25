@@ -22,5 +22,5 @@ content-type: application/json
     "password" : "abc123"
 }
 
-### Delete USer par ID
+### Delete User par ID
 DELETE http://localhost:3000/users/1

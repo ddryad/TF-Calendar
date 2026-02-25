@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { NotFoundError } from 'rxjs';
+import e from 'express';
 
 @Injectable()
 export class UsersService {
@@ -27,11 +28,19 @@ export class UsersService {
 
     }
 
+    async findByEmail(email : string){
+
+        const user = await this.usersRepository.findOneBy({email : email})
+
+        return user ? user : new NotFoundException(`User avec email ${email} n'existe pas`)
+
+    }
+
     async findOneUser(id : number){
 
         const user = await this.usersRepository.findOne({where : {id : id}})
 
-        return user ? user : new NotFoundException()
+        return user ? user : new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
 
     }
 
@@ -39,7 +48,7 @@ export class UsersService {
 
         let user = await this.usersRepository.findOneBy({id : id})
 
-        if(!user) throw new NotFoundException("User Inexistant")
+        if(!user) throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
 
         this.usersRepository.remove(user)
 
@@ -50,7 +59,7 @@ export class UsersService {
         let user = await this.usersRepository.findOneBy({id : id})
 
         if (!user){
-            throw new NotFoundException()
+            throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
         }
 
         user = Object.assign(user, attrs)
