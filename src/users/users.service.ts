@@ -22,43 +22,45 @@ export class UsersService {
 
         const user = this.usersRepository.create({ email: userDTO.email, password: userDTO.password })
 
-        this.usersRepository.insert(user)
+        this.usersRepository.save(user)
+
+        return user
 
         //await this.usersRepository.save(userDTO)
 
     }
 
-    async findByEmail(email : string){
+    async findByEmail(email: string) {
 
-        const user = await this.usersRepository.findOneBy({email : email})
+        const user = await this.usersRepository.findOneBy({ email: email })
 
         return user ? user : new NotFoundException(`User avec email ${email} n'existe pas`)
 
     }
 
-    async findOneUser(id : number){
+    async findOneUser(id: number) {
 
-        const user = await this.usersRepository.findOne({where : {id : id}})
+        const user = await this.usersRepository.findOne({ where: { id: id } })
 
         return user ? user : new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
 
     }
 
-    async deleteOneUser(id : number){
+    async deleteOneUser(id: number) {
 
-        let user = await this.usersRepository.findOneBy({id : id})
+        let user = await this.usersRepository.findOneBy({ id: id })
 
-        if(!user) throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
+        if (!user) throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
 
         this.usersRepository.remove(user)
 
     }
 
-    async updateUser(id : number, attrs : Partial<User>){
+    async updateUser(id: number, attrs: Partial<User>) {
 
-        let user = await this.usersRepository.findOneBy({id : id})
+        let user = await this.usersRepository.findOneBy({ id: id })
 
-        if (!user){
+        if (!user) {
             throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
         }
 

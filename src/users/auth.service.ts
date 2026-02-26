@@ -1,29 +1,29 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { UsersService } from './users.service';
+import * as bcrypt from "bcrypt"
 import { User } from './user.entity';
 
 @Injectable()
 export class AuthService {
 
-    constructor(private userService : UsersService){}
+    constructor(private userService: UsersService) { }
 
-    async signIn(email : string, password : string){
-
-        //check if email is in database
+    async signIn(email: string, password: string) {
 
         const user = await this.userService.findByEmail(email)
 
-        if(user){
+        if (user) {
             throw new NotAcceptableException("email already exists.")
         }
 
-        //this.userService.createUser()
-
         //hash password
+        const passwordHash = await bcrypt.hash(password, 6)
+
         //create new User
         //return User
+        return this.userService.createUser({ email: email, password: passwordHash })
     }
 
-    signUp(){}
+    signUp() { }
 
 }
