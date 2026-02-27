@@ -34,7 +34,7 @@ export class UsersService {
 
         const user = await this.usersRepository.findOneBy({ email: email })
 
-        return user ? user : new NotFoundException(`User avec email ${email} n'existe pas`)
+        return user
 
     }
 

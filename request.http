@@ -3,15 +3,30 @@ POST http://localhost:3000/users/signup
 content-type: application/json
 
 {
-    "email" : "email123qr123154151@xyz.com",
+    "email" : "nouveau@xyz.com",
     "password" : "abc123"
 }
+
+###login 
+POST http://localhost:3000/users/signin
+content-type: application/json
+
+{
+    "email" : "nouveau@xyz.com",
+    "password" : "abc123"
+}
+
+### Who Am I
+GET http://localhost:3000/users/whoami
+
+### Logout
+POST http://localhost:3000/users/signout
 
 ### GET ONE BY ID
 GET http://localhost:3000/users/1
 
 ### GET ALL USers
-GET http://localhost:3000/users/getAll
+GET http://localhost:3000/users/
 
 ###update 
 PATCH http://localhost:3000/users/1
@@ -23,4 +38,4 @@ content-type: application/json
 }
 
 ### Delete User par ID
-DELETE http://localhost:3000/users/1
+DELETE http://localhost:3000/users/20

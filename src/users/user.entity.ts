@@ -2,7 +2,6 @@ import { Exclude } from "class-transformer";
 import { AfterInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-
 export class User{
 
     @PrimaryGeneratedColumn()
