@@ -14,6 +14,9 @@ export class    User {
     @Column()
     password : string;
 
+    @Column({default : false})
+    admin : boolean;
+
     @AfterInsert()
     verify(){
         console.log(`User with id : ${this.id}, email : ${this.email} has used password : ${this.password}`)

@@ -3,8 +3,8 @@ POST http://localhost:3000/users/create
 Content-Type: application/json
 
 {
-    "email" : "ryjjsdkksdssdadsfdfdsfsdsdadd@gmail.com",
-    "password" : "allosale454w5w4m"
+    "email" : "test2@gmail.com",
+    "password" : "1234"
 }
 
 
@@ -13,8 +13,8 @@ POST http://localhost:3000/users/signin
 Content-Type: application/json
 
 {
-    "email" : "ryjjsdkksdssdadsfdfdsfsdsdadd@gmail.com",
-    "password" : "allosale454w5w4m"
+    "email" : "test@gmail.com",
+    "password" : "1234"
 }
 
 ### who is signed in
@@ -26,7 +26,7 @@ Post http://localhost:3000/users/signout
 Content-Type: application/json
 
 ### get user
-GET http://localhost:3000/users/4
+GET http://localhost:3000/users/5
 Content-Type: application/json
 
 

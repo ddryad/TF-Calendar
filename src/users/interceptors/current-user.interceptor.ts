@@ -7,27 +7,20 @@ import { UsersService } from "../users.service";
 
 
 @Injectable()
-export class CurrentUserInterceptor implements NestInterceptor{
+export class CurrentUserInterceptor implements NestInterceptor {
 
-    constructor (private userService : UsersService) {}
+    constructor(private userService: UsersService) {}
 
+    async intercept(context: ExecutionContext, next: CallHandler) {
 
-    intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
-        
         const request = context.switchToHttp().getRequest();
-        const userId =  request.session.userid;
+        const {userId} = request.session || {};
 
-        // if (!userId){
-        //     throw new NotFoundException;
-        // }
-
-        const user = this.userService.findone(userId)
-        
-        request.currentUser = user;
+        if (userId) {
+            const user = await this.userService.findone(userId);
+            request.currentUser = user;
+        }
 
         return next.handle();
-
-    
     }
-
 }
