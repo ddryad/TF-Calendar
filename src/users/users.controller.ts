@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Session, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Session, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { Serialize } from 'src/interceptors/SerializeInterceptor';
@@ -7,9 +7,9 @@ import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 import { CurrentUserInterceptor } from 'src/interceptors/CurrentUserInterceptor';
+import { AllowLoggedIn, AuthGuard } from 'src/guards/auth-guard';
+import { AdminGuard } from 'src/guards/admin-guard';
 
-
-@UseInterceptors(CurrentUserInterceptor)
 @Controller('users')
 export class UsersController {
 
@@ -20,6 +20,13 @@ export class UsersController {
         const user = await this.authService.signUp(body.email, body.password)
         session.userId = user.id
         return user
+    }
+
+    @AllowLoggedIn()
+    @Get("/message")
+    async getMessage(){
+
+        return "ABCDEF"
     }
 
     @Post("/signin")
@@ -39,10 +46,11 @@ export class UsersController {
 
     @Get("/whoami")
     whoami(@CurrentUser() user : User) {
-        console.log("allo")
+        console.log(user)
         return user
     }
 
+    @UseGuards(AdminGuard)
     @Get("")
     getAllUsers() {
         return this.userService.findAll()

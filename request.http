@@ -12,6 +12,15 @@ POST http://localhost:3000/users/signin
 content-type: application/json
 
 {
+    "email" : "noadmin@xyz.com",
+    "password" : "abc123"
+}
+
+###login ADMIN
+POST http://localhost:3000/users/signin
+content-type: application/json
+
+{
     "email" : "nouveau@xyz.com",
     "password" : "abc123"
 }
@@ -38,4 +47,7 @@ content-type: application/json
 }
 
 ### Delete User par ID
-DELETE http://localhost:3000/users/20
+DELETE http://localhost:3000/users/1
+
+### GET MESSAGE (ONLY ALLOWED IF LOGGED IN)
+GET http://localhost:3000/users/message
