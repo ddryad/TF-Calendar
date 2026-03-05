@@ -3,7 +3,7 @@ POST http://localhost:3000/users/create
 Content-Type: application/json
 
 {
-    "email" : "ryjjsdkksdssdadsfdfdsfsdsdad@gmail.com",
+    "email" : "ryjjsdkksdssdadsfdfdsfsdsdadd@gmail.com",
     "password" : "allosale454w5w4m"
 }
 
@@ -13,7 +13,7 @@ POST http://localhost:3000/users/signin
 Content-Type: application/json
 
 {
-    "email" : "ryjjsdkksdssdadsfdfdsfsdsdad@gmail.com",
+    "email" : "ryjjsdkksdssdadsfdfdsfsdsdadd@gmail.com",
     "password" : "allosale454w5w4m"
 }
 

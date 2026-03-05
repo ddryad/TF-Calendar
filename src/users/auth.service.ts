@@ -28,6 +28,8 @@ export class AuthService {
 
     }
 
+    
+
     async signup(email : string, password : string) {
         
         const users = await this.UsersService.findByEmail(email)
@@ -43,6 +45,10 @@ export class AuthService {
 
         return this.UsersService.create(email, result)
 
+    }
+
+    async whoami(session : any){
+        return session.id == null ? "No one logged in" : this.UsersService.findone(session.id)
     }
 
 }

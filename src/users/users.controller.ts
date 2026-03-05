@@ -9,8 +9,10 @@ import { serialize } from 'v8';
 import { UserDto } from './dtos/user.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 
-
+@UseInterceptors(CurrentUserInterceptor)
 @Controller('users')
 export class UsersController {
 
@@ -34,15 +36,13 @@ export class UsersController {
 
     @Post("/signout")
     async signout(@Session() session : any){
-        
-
         session.id = null
     }
 
     @Get("/whoami")
-    async whoAmI(@Session() session : any){
-        console.log(session.userId)
-        return session.id == null ? "No one logged in" : this.service.findone(session.userId)
+    async whoAmI(@CurrentUser() user : User, @Session() session : any){
+        console.log(session.id)
+        return user;
     }
 
     // @UseInterceptors(ClassSerializerInterceptor)
