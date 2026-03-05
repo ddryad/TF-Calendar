@@ -6,7 +6,6 @@ import { UserDTO } from './dtos/user.dto';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
-import { CurrentUserInterceptor } from 'src/interceptors/CurrentUserInterceptor';
 import { AllowLoggedIn, AuthGuard } from 'src/guards/auth-guard';
 import { AdminGuard } from 'src/guards/admin-guard';
 
