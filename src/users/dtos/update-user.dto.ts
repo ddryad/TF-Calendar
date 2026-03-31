@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-import { IsEmail, IsOptional, IsString } from "class-validator";
-
-
-export class UpdateUserDto{
-
-
-    @IsEmail()
-    @IsOptional()
-    email : string
-
-    @IsString()
-    @IsOptional()
-    password : string
-
-}
-=======
 import { IsEmail, IsOptional, IsString, IsNumber } from "class-validator";
 
 export class UpdateUserDTO{
@@ -43,4 +26,3 @@ export class UpdateUserDTO{
     @IsOptional()
     calendrierId?: number
 }
->>>>>>> master

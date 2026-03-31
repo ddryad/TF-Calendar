@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-import { IsEmail, IsNotEmpty, IsString } from "class-validator";
-=======
 import { IsEmail, IsNotEmpty, IsString, IsOptional, IsNumber } from "class-validator";
->>>>>>> master
-
 
 export class CreateUserDTO{
 
@@ -16,8 +11,6 @@ export class CreateUserDTO{
     @IsNotEmpty()
     password : string
 
-<<<<<<< HEAD
-=======
     @IsString()
     @IsOptional()
     nomComplet?: string
@@ -33,5 +26,4 @@ export class CreateUserDTO{
     @IsNumber()
     @IsOptional()
     calendrierId?: number
->>>>>>> master
 }

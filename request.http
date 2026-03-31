@@ -1,7 +1,4 @@
 ###créer user
-<<<<<<< HEAD
-POST http://localhost:3005/users/create
-=======
 POST http://localhost:3000/users/signup
 content-type: application/json
 
@@ -42,7 +39,6 @@ GET http://localhost:3000/users/
 
 ###update 
 PATCH http://localhost:3000/users/1
->>>>>>> master
 content-type: application/json
 
 {
