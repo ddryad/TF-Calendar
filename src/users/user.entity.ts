@@ -1,5 +1,5 @@
 import { Exclude } from "class-transformer";
-import { AfterInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { AfterInsert, Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
 
 @Entity()
 export class User{
@@ -14,13 +14,21 @@ export class User{
     @Column()
     password : string
 
-    @Column({default: false})
-    admin : boolean
+    @Column({ nullable: true })
+    nomComplet: string
 
-    @AfterInsert()
-    verify(){
-        console.log(`User with id ${this.id} with email ${this.email} has been created.`)
-    }
-    
+    @Column({ nullable: true })
+    omnivoxDA: string
+
+    @Exclude()
+    @Column({ nullable: true })
+    omnivoxPasswordHash: string
+
+    @Column({ nullable: true })
+    calendrierId: number
+
+    @ManyToMany(() => User)
+    @JoinTable()
+    friends: User[]
     
 }

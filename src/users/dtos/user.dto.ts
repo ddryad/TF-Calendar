@@ -10,4 +10,12 @@ export class UserDTO{
     @Expose()
     id:number
 
+    @Expose()
+    nomComplet: string
+
+    @Expose()
+    omnivoxDA: string
+
+    @Expose()
+    calendrierId: number
 }
