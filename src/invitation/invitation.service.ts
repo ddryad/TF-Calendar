@@ -1,4 +1,65 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Invitation } from './invitation.entity';
+import { CreateInvitationDto } from './dtos/create-invitation.dto';
+import { UpdateInvitationDto } from './dtos/update-invitation.dto';
+import { InvitationStatut } from './enums/invitation-statut.enum';
 
 @Injectable()
-export class InvitationService {}
+export class InvitationService {
+    constructor(
+    @InjectRepository(Invitation)
+    private invitationRepository: Repository<Invitation>,
+    ){}
+
+    async findAll(){
+        return await this.invitationRepository.find()
+    }
+
+    async findOne(id: number){
+        const invitation = await this.invitationRepository.findOne({where:{id}})
+        if(!invitation){
+            throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
+        }
+        return invitation
+    }
+
+    async createInvitation(invitationDto: CreateInvitationDto){
+        const invitation = this.invitationRepository.create({
+           senderId: invitationDto.senderId,
+           invitedUserId: invitationDto.invitedUserId,
+           type: invitationDto.type,
+           statut: InvitationStatut.PENDING,
+           sentAt: new Date(),
+        });
+
+        return this.invitationRepository.save(invitation);
+    }
+
+    async acceptInvitation(id: number){
+        const invitation  = await this.findOne(id)
+
+        if(!invitation){
+            throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
+        }
+        invitation.statut = InvitationStatut.ACCEPTED;
+        return this.invitationRepository.save(invitation);
+    }
+
+    async refuseInvitation(id: number){
+        const invitation  = await this.findOne(id)
+
+        if(!invitation){
+            throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
+        }
+        invitation.statut = InvitationStatut.REFUSED;
+
+        return this.invitationRepository.save(invitation);
+    }
+
+    
+
+
+
+}
