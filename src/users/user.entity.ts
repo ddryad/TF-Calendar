@@ -1,15 +1,35 @@
-import { AfterInsert, Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Exclude } from "class-transformer";
+import { AfterInsert, Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
 
 @Entity()
 export class User{
+
     @PrimaryGeneratedColumn()
-    id :number;
-
+    id : number
+    
     @Column()
-    email: string;
-
+    email : string
+    
+    @Exclude()
     @Column()
-    password : string;
+    password : string
+
+    @Column({ nullable: true })
+    nomComplet: string
+
+    @Column({ nullable: true })
+    omnivoxDA: string
+
+    @Exclude()
+    @Column({ nullable: true })
+    omnivoxPasswordHash: string
+
+    @Column({ nullable: true })
+    calendrierId: number
+
+    @ManyToMany(() => User)
+    @JoinTable()
+    friends: User[]
 
     @AfterInsert()
     verify(){
