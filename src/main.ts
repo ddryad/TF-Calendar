@@ -9,6 +9,11 @@ async function bootstrap() {
   app.use(cookieSession({
     secret: "mysecretkey"
   }))
+
+  app.enableCors({
+    origin: "http://localhost:5173",   // your Vite dev server
+    credentials: true,                 // allow cookies
+  });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true, forbidNonWhitelisted: true }))
   // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
   await app.listen(process.env.PORT ?? 3000);
