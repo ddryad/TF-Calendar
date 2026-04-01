@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext } from "@nestjs/common";
 import { Observable } from "rxjs";
-import { AuthService } from "src/users/auth.service";
+// import { AuthService } from "src/users/auth.service";
 import { UsersController } from "src/users/users.controller";
 
 

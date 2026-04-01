@@ -1,15 +1,15 @@
 ### create user test
-POST http://localhost:3000/users/create
+POST http://localhost:3000/auth/create
 Content-Type: application/json
 
 {
-    "email" : "test2@gmail.com",
+    "email" : "test3@gmail.com",
     "password" : "1234"
 }
 
 
 ### sign user in
-POST http://localhost:3000/users/signin
+POST http://localhost:3000/auth/signin
 Content-Type: application/json
 
 {

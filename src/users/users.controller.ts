@@ -8,7 +8,6 @@ import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 import { serialize } from 'v8';
 import { UserDto } from './dtos/user.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { AuthGuard } from 'src/guards/auth.guard';
@@ -19,22 +18,7 @@ import { AdminGuard } from 'src/guards/admin.guard';
 @Controller('users')
 export class UsersController {
 
-    constructor(private service : UsersService, private authService : AuthService) {}
-
-    @Post("/create")
-    async createUser(@Body() body : CreateUserDto, @Session() session : any){
-        // console.log(body)
-        const user = await this.authService.signup(body.email, body.password)
-        session.userId = user.id
-        return user
-    }
-
-    @Post("/signin")
-    async signin(@Body() body: CreateUserDto, @Session() session: any) {
-        const user = await this.authService.signin(body.email, body.password);
-        session.userId = user.id;
-        return user;
-    }
+    constructor(private service : UsersService) {}
 
     @UseGuards(AuthGuard)
     @Post("/signout")

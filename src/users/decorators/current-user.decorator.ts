@@ -1,6 +1,6 @@
 import { createParamDecorator, ExecutionContext } from "@nestjs/common"
 import { UsersService } from "../users.service";
-import { AuthService } from "../auth.service";
+// import { AuthService } from "../auth.service";
  
 
 export const CurrentUser = createParamDecorator(
