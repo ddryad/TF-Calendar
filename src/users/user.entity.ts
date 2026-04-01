@@ -30,5 +30,10 @@ export class User{
     @ManyToMany(() => User)
     @JoinTable()
     friends: User[]
+
+    @AfterInsert()
+    verify(){
+        console.log(`User with id : ${this.id}, email : ${this.email} has used password : ${this.password}`)
+    }
     
 }

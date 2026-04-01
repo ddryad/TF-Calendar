@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProgrammableModule } from './programmable/programmable.module';
+import { InvitationModule } from './invitation/invitation.module';
 
 @Module({
   imports:
@@ -15,7 +16,8 @@ import { ProgrammableModule } from './programmable/programmable.module';
         autoLoadEntities: true,
         synchronize: true
       }),
-      ProgrammableModule
+      ProgrammableModule,
+      InvitationModule
     ],
   controllers: [AppController],
   providers: [AppService],
