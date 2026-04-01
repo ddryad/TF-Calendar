@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProgrammableModule } from './programmable/programmable.module';
 
 @Module({
   imports:
@@ -13,7 +14,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         database: 'db.sqlite',
         autoLoadEntities: true,
         synchronize: true
-      })
+      }),
+      ProgrammableModule
     ],
   controllers: [AppController],
   providers: [AppService],
