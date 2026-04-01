@@ -35,5 +35,6 @@ export class User{
     verify(){
         console.log(`User with id : ${this.id}, email : ${this.email} has used password : ${this.password}`)
     }
+
     
 }

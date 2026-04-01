@@ -1,0 +1,40 @@
+### create user test
+POST http://localhost:3000/auth/create
+Content-Type: application/json
+
+{
+    "email" : "test3@gmail.com",
+    "password" : "1234"
+}
+
+
+### sign user in
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email" : "test@gmail.com",
+    "password" : "1234"
+}
+
+### who is signed in
+GET http://localhost:3000/users/whoami
+Content-Type: application/json
+
+### signout
+Post http://localhost:3000/users/signout
+Content-Type: application/json
+
+### get user
+GET http://localhost:3000/users/5
+Content-Type: application/json
+
+
+### update user
+PATCH http://localhost:3000/users/4
+Content-Type: application/json
+
+{
+    "email" : "test@hotmail.com",
+    "password" : "salembassem"
+}
