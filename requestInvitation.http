@@ -3,8 +3,8 @@ POST http://localhost:3000/invitation
 content-type: application/json
 
 {
-  "senderId": "4",
-  "invitedUserId": "3",
+  "senderId": "1",
+  "invitedUserId": "2",
   "type": "invitation"
 }
 
@@ -17,7 +17,7 @@ GET http://localhost:3000/invitation/1
 
 
 ### accepter une  invitation
-PATCH http://localhost:3000/invitation/1/accept
+PATCH http://localhost:3000/invitation/2/accept
 
 ### refuser une  invitation
 PATCH http://localhost:3000/invitation/1/refuse
