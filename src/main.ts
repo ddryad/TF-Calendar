@@ -1,10 +1,8 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
-import { CurrentUserMiddleware } from './users/middlewares/current-user.middleware';
+import { ValidationPipe } from '@nestjs/common';
 
 const cookieSession = require('cookie-session')
-import cookieSession from 'cookie-session';
 // import { Reflector } from '@nestjs/core';
 
 async function bootstrap() {

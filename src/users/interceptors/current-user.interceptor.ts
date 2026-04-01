@@ -1,8 +1,4 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor, NotFoundException } from "@nestjs/common";
-import { map, Observable } from "rxjs";
-import { UserDto } from "../dtos/user.dto";
-import { plainToClass } from "class-transformer";
-import { Session } from "@nestjs/common";
 import { UsersService } from "../users.service";
 
 
@@ -17,7 +13,7 @@ export class CurrentUserInterceptor implements NestInterceptor {
         const {userId} = request.session || {};
 
         if (userId) {
-            const user = await this.userService.findone(userId);
+            const user = await this.userService.findOneUser(userId);
             request.currentUser = user;
         }
 

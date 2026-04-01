@@ -11,7 +11,7 @@ export class Invitation{
     @Column()
     invitedUserId: number;
 
-    @Column()//{type: 'text', enum: InvitationStatut}) //TypeORM voit un Objet donc on précise le type dans @Column
+    @Column({type: 'text', enum: InvitationStatut}) //TypeORM voit un Objet donc on précise le type dans @Column
     statut: InvitationStatut;
 
     @Column()

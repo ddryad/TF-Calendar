@@ -1,11 +1,11 @@
 ###                  USERS MODULE                       ###
 
 ### Créer user
-POST http://localhost:3000/users/signup
+POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "nouveau@xyz.com",
+    "email": "user6@xyz.com",
     "password": "abc123",
     "nomComplet": "Haroune Belhachani",
     "omnivoxDA": "0981234",
@@ -14,11 +14,11 @@ content-type: application/json
 }
 
 ### Login 
-POST http://localhost:3000/users/signin
+POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "nouveau@xyz.com",
+    "email": "user6@xyz.com",
     "password": "abc123"
 }
 
@@ -41,7 +41,7 @@ POST http://localhost:3000/users/signout
 GET http://localhost:3000/users/1
 
 ### GET ALL Users (Requires Admin Guard)
-GET http://localhost:3000/users/
+GET http://localhost:3000/users
 
 ### Update User par ID
 PATCH http://localhost:3000/users/1
@@ -52,10 +52,6 @@ content-type: application/json
     "nomComplet": "Updated Name"
 }
 
-<<<<<<< HEAD
-###trouver tous les users
-GET  http://localhost:3005/users/getAll
-=======
 ### Delete User par ID
 DELETE http://localhost:3000/users/1
 
@@ -93,4 +89,3 @@ GET http://localhost:3000/programmable
 
 ### Obtenir un programmable spécifique par id
 GET http://localhost:3000/programmable/1
->>>>>>> master
