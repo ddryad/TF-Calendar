@@ -15,7 +15,23 @@ import { AuthModule } from './auth/auth.module';
   }),
     UsersModule,
     AuthModule],
+import { ProgrammableModule } from './programmable/programmable.module';
+import { InvitationModule } from './invitation/invitation.module';
+
+@Module({
+  imports:
+    [
+      UsersModule,
+      TypeOrmModule.forRoot({
+        type: 'sqlite',
+        database: 'db.sqlite',
+        autoLoadEntities: true,
+        synchronize: true
+      }),
+      ProgrammableModule,
+      InvitationModule
+    ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

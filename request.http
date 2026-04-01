@@ -1,0 +1,96 @@
+###                  USERS MODULE                       ###
+
+### Créer user
+POST http://localhost:3000/users/signup
+content-type: application/json
+
+{
+    "email": "nouveau@xyz.com",
+    "password": "abc123",
+    "nomComplet": "Haroune Belhachani",
+    "omnivoxDA": "0981234",
+    "omnivoxPasswordHash": "somehash",
+    "calendrierId": 1
+}
+
+### Login 
+POST http://localhost:3000/users/signin
+content-type: application/json
+
+{
+    "email": "nouveau@xyz.com",
+    "password": "abc123"
+}
+
+### Login ADMIN (Change email if necessary)
+POST http://localhost:3000/users/signin
+content-type: application/json
+
+{
+    "email": "admin@xyz.com",
+    "password": "abc123"
+}
+
+### Who Am I (Requires valid cookie session)
+GET http://localhost:3000/users/whoami
+
+### Logout
+POST http://localhost:3000/users/signout
+
+### GET ONE User BY ID
+GET http://localhost:3000/users/1
+
+### GET ALL Users (Requires Admin Guard)
+GET http://localhost:3000/users/
+
+### Update User par ID
+PATCH http://localhost:3000/users/1
+content-type: application/json
+
+{
+    "email": "email_updated@xyz.com",
+    "nomComplet": "Updated Name"
+}
+
+<<<<<<< HEAD
+###trouver tous les users
+GET  http://localhost:3005/users/getAll
+=======
+### Delete User par ID
+DELETE http://localhost:3000/users/1
+
+### GET MESSAGE (ONLY ALLOWED IF LOGGED IN)
+GET http://localhost:3000/users/message
+
+
+###             PROGRAMMABLE MODULE                     ###
+
+### Créer un Événement
+POST http://localhost:3000/programmable/evenement
+content-type: application/json
+
+{
+    "nom": "Examen Final",
+    "description": "Examen de fin de session",
+    "dateDepart": "2026-05-15T09:00:00Z",
+    "dureeJours": 1
+}
+
+### Créer une Activité
+POST http://localhost:3000/programmable/activite
+content-type: application/json
+
+{
+    "nom": "Révision de groupe",
+    "description": "Étudier pour l'examen de programmation",
+    "dateDepart": "2026-05-10T14:00:00Z",
+    "dureeHeures": 3,
+    "priorite": "URGENT"
+}
+
+### Obtenir tous les programmables (Evenements et Activites )
+GET http://localhost:3000/programmable
+
+### Obtenir un programmable spécifique par id
+GET http://localhost:3000/programmable/1
+>>>>>>> master

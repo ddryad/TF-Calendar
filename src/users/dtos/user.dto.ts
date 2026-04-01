@@ -1,11 +1,21 @@
 import { Expose } from "class-transformer";
 
-export class UserDto {
+
+export class UserDTO{
+
 
     @Expose()
-    id : number;
-    
-    @Expose()
-    email : string;
+    email : string
 
+    @Expose()
+    id:number
+
+    @Expose()
+    nomComplet: string
+
+    @Expose()
+    omnivoxDA: string
+
+    @Expose()
+    calendrierId: number
 }

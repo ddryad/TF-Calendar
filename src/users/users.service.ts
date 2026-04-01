@@ -2,63 +2,64 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
+import { CreateUserDTO } from './dtos/create-user.dto';
 
 @Injectable()
 export class UsersService {
 
-    constructor(@InjectRepository(User) private repo : Repository<User>) {} 
+    constructor(
+        @InjectRepository(User)
+        private usersRepository: Repository<User>,
+    ) { }
 
-    create (email : string, password : string) {
-        const user = this.repo.create({email,password});
-        return this.repo.save(user)
-
-        // return this.repo.save({email,password})
+    async findAll() {
+        return await this.usersRepository.find()
     }
 
-    async findone(id : number){
-        const user = await this.repo.findOneBy({id})
-
-        if( !user ) throw new NotFoundException("user not found")
-
+    async createUser(userDTO: CreateUserDTO) {
+        const user = this.usersRepository.create({ email: userDTO.email, password: userDTO.password })
+        await this.usersRepository.save(user)
         return user
+    }
+
+    async findByEmail(email: string) {
+        const user = await this.usersRepository.findOneBy({ email: email })
+        return user
+    }
+
+    async findOneUser(id: number) {
+        const user = await this.usersRepository.findOne({ where: { id } })
+        if (!user) {
+            throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
+        }
+        return user
+    }
+
+    async deleteOneUser(id: number) {
+
+        let user = await this.usersRepository.findOneBy({ id: id })
+
+        if (!user) throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
+
+        this.usersRepository.remove(user)
 
     }
 
-    // async findPassword(email : string){
-    //     const user = this.findByEmail(email)
-        
+    async updateUser(id: number, attrs: Partial<User>) {
 
-    // }
+        let user = await this.usersRepository.findOneBy({ id: id })
 
-    async findByEmail(email : string){
-        const user = this.repo.findOneBy({email : email})
-
-        if( user ) return user
-
-        throw new NotFoundException("user not found")
-
-    }
-
-    
-
-    findAllUsers(){
-
-    }
-
-    async updateUser(id : number, attrs : Partial<User>) {
-        let user = await this.repo.findOne({where : {id : id}});
-
-        if(!user) {
-            throw new NotFoundException()
+        if (!user) {
+            throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
         }
 
         user = Object.assign(user, attrs)
 
-
-        return this.repo.save(user)
-
-        
-
+        this.usersRepository.save(user)
     }
 
 }
