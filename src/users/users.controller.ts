@@ -20,7 +20,7 @@ export class UsersController {
         session.userId = null
     }
 
-    @UseGuards(AuthGuard)
+    //@UseGuards(AuthGuard)
     @Get("/whoami")
     async whoAmI(@CurrentUser() user : User){
         return user;

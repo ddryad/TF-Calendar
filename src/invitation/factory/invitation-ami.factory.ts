@@ -1,1 +1,7 @@
-export class InvitationAmiFactory{}
+
+
+export class InvitationAmiFactory{
+    create(){
+        
+    }
+}

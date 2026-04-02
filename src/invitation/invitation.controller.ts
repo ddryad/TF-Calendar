@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Patch, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { InvitationService } from './invitation.service';
 import { CreateInvitationDto } from './dtos/create-invitation.dto';
 import { UpdateInvitationDto } from './dtos/update-invitation.dto';
 import { Invitation } from './invitation.entity';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 
-
+@UseGuards(AuthGuard)
 @Controller('invitation')// /invitation
 export class InvitationController {
     /*
