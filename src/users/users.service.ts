@@ -18,8 +18,9 @@ export class UsersService {
 
     async createUser(userDTO: CreateUserDTO) {
         const user = this.usersRepository.create(
-            { email: userDTO.email, 
-                password: userDTO.password, 
+            { 
+                email: userDTO.email, 
+                passwordHash: userDTO.password, 
                 nomComplet: userDTO.nomComplet, 
                 omnivoxDA: userDTO.omnivoxDA,
                 calendrierId : userDTO.calendrierId,

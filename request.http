@@ -5,7 +5,7 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "user6@xyz.com",
+    "email": "user7@xyz.com",
     "password": "abc123",
     "nomComplet": "Haroune Belhachani",
     "omnivoxDA": "0981234",
@@ -19,15 +19,6 @@ content-type: application/json
 
 {
     "email": "user6@xyz.com",
-    "password": "abc123"
-}
-
-### Login ADMIN (Change email if necessary)
-POST http://localhost:3000/users/signin
-content-type: application/json
-
-{
-    "email": "admin@xyz.com",
     "password": "abc123"
 }
 
@@ -54,9 +45,6 @@ content-type: application/json
 
 ### Delete User par ID
 DELETE http://localhost:3000/users/1
-
-### GET MESSAGE (ONLY ALLOWED IF LOGGED IN)
-GET http://localhost:3000/users/message
 
 
 ###             PROGRAMMABLE MODULE                     ###

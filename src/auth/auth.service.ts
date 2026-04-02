@@ -18,7 +18,7 @@ export class AuthService {
             throw new BadRequestException("user doesnt exist")
         }
 
-        const [salt, storedHash] = user.password.split('.')
+        const [salt, storedHash] = user.passwordHash.split('.')
 
         const hash = (await scrypt(password, salt, 32)) as Buffer
 
@@ -52,23 +52,6 @@ export class AuthService {
         })
 
     }
-
-    /* async signup(email : string, password : string) {
-        
-        const users = await this.UsersService.findByEmail(email)
-
-        if (users){
-            throw new BadRequestException("user already exist")
-        }
-        
-        const salt = randomBytes(8).toString('hex')
-        const hash = (await scrypt(password, salt, 32)) as Buffer;
-
-        const result = salt + '.' + hash.toString('hex')
-
-        return this.UsersService.createUser({email : email, password : password})
-
-    } */
 
     async whoami(session : any){
         return session.id == null ? "No one logged in" : this.UsersService.findOneUser(session.id)

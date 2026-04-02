@@ -8,7 +8,7 @@ export class UpdateUserDTO{
 
     @IsString()
     @IsOptional()
-    password?: string
+    passwordHash?: string
 
     @IsString()
     @IsOptional()
