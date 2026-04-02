@@ -10,8 +10,6 @@ export class CurrentUserMiddleWare implements NestMiddleware{
 
         const { userId } = req.session;
 
-        console.log(userId)
-
         if(userId){
             const user = await this.userService.findOneUser(userId);
             req.session.currentUser = user;

@@ -24,7 +24,7 @@ export class UsersService {
                 nomComplet: userDTO.nomComplet, 
                 omnivoxDA: userDTO.omnivoxDA,
                 calendrierId : userDTO.calendrierId,
-                omnivoxPasswordHash : userDTO.omnivoxPasswordHash
+                omnivoxPasswordHash : userDTO.omnivoxPassword
             })
         await this.usersRepository.save(user)
         return user
@@ -63,7 +63,7 @@ export class UsersService {
 
         user = Object.assign(user, attrs)
 
-        this.usersRepository.save(user)
+        return await this.usersRepository.save(user)
     }
 
 }

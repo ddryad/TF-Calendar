@@ -39,4 +39,22 @@ export class ProgrammableService {
     const activite = this.activiteRepo.create(createDto);
     return this.activiteRepo.save(activite);
   }
+
+  async updateEvenement(id : string, attrs : Partial<CreateEvenementDto>) : Promise<Evenement>{
+    let evenement = await this.findOne(id)
+    if(!evenement){
+      throw new NotFoundException(`Evenement avec id ${id} non trouve`);
+    }
+    evenement = Object.assign(evenement, attrs)
+    return this.evenementRepo.save(evenement)
+  }
+
+  async updateActivite(id : string, attrs : Partial<CreateActiviteDto>) : Promise<Activite>{
+    let activite = await this.findOne(id)
+    if(!activite){
+      throw new NotFoundException(`Activite avec id ${id} non trouve`);
+    }
+    activite = Object.assign(activite, attrs)
+    return this.activiteRepo.save(activite)
+  }
 }
