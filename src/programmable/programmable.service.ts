@@ -16,7 +16,7 @@ export class ProgrammableService {
     private readonly evenementRepo: Repository<Evenement>,
     @InjectRepository(Activite)
     private readonly activiteRepo: Repository<Activite>
-  ) {}
+  ) { }
 
   async findAll(): Promise<Programmable[]> {
     return this.programmableRepo.find();
@@ -38,5 +38,32 @@ export class ProgrammableService {
   async createActivite(createDto: CreateActiviteDto): Promise<Activite> {
     const activite = this.activiteRepo.create(createDto);
     return this.activiteRepo.save(activite);
+  }
+
+  async updateEvenement(id: string, attrs: Partial<CreateEvenementDto>): Promise<Evenement> {
+    let evenement = await this.findOne(id)
+    if (!evenement) {
+      throw new NotFoundException(`Evenement avec id ${id} non trouve`);
+    }
+    evenement = Object.assign(evenement, attrs)
+    return this.evenementRepo.save(evenement)
+  }
+
+  async updateActivite(id: string, attrs: Partial<CreateActiviteDto>): Promise<Activite> {
+    let activite = await this.findOne(id)
+    if (!activite) {
+      throw new NotFoundException(`Activite avec id ${id} non trouve`);
+    }
+    activite = Object.assign(activite, attrs)
+    return this.activiteRepo.save(activite)
+  }
+
+  async deleteProgrammable(id : string): Promise<Programmable> {
+
+    const programmable = await this.findOne(id)
+
+    if (!programmable) { throw new NotFoundException(`Activite avec id ${id} non trouve`); }
+
+    return this.programmableRepo.remove(programmable)
   }
 }

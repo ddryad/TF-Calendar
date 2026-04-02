@@ -14,13 +14,13 @@ export class UsersController {
 
     constructor(private service : UsersService) {}
 
-    @UseGuards(AuthGuard)
+    //@UseGuards(AuthGuard)
     @Post("/signout")
     async signout(@Session() session : any){
         session.userId = null
     }
 
-    //@UseGuards(AuthGuard)
+    @Serialize(UserDTO)
     @Get("/whoami")
     async whoAmI(@CurrentUser() user : User){
         return user;
@@ -38,6 +38,7 @@ export class UsersController {
         return this.service.updateUser(parseInt(id), body)
     }
 
+    @Serialize(UserDTO)
     @Get("")
     getAllUsers() {
         return this.service.findAll()

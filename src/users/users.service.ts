@@ -18,12 +18,13 @@ export class UsersService {
 
     async createUser(userDTO: CreateUserDTO) {
         const user = this.usersRepository.create(
-            { email: userDTO.email, 
-                password: userDTO.password, 
+            { 
+                email: userDTO.email, 
+                passwordHash: userDTO.password, 
                 nomComplet: userDTO.nomComplet, 
                 omnivoxDA: userDTO.omnivoxDA,
                 calendrierId : userDTO.calendrierId,
-                omnivoxPasswordHash : userDTO.omnivoxPasswordHash
+                omnivoxPasswordHash : userDTO.omnivoxPassword
             })
         await this.usersRepository.save(user)
         return user
@@ -62,7 +63,7 @@ export class UsersService {
 
         user = Object.assign(user, attrs)
 
-        this.usersRepository.save(user)
+        return await this.usersRepository.save(user)
     }
 
 }

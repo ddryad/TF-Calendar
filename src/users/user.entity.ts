@@ -12,7 +12,7 @@ export class User{
     
     @Exclude()
     @Column()
-    password : string
+    passwordHash : string
 
     @Column({ nullable: true })
     nomComplet: string
@@ -33,7 +33,7 @@ export class User{
 
     @AfterInsert()
     verify(){
-        console.log(`User with id : ${this.id}, email : ${this.email} has used password : ${this.password}`)
+        console.log(`User with id : ${this.id}, email : ${this.email} has used password : ${this.passwordHash}`)
     }
 
     

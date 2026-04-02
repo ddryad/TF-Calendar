@@ -21,7 +21,7 @@ export class CreateUserDTO{
 
     @IsString()
     @IsOptional()
-    omnivoxPasswordHash?: string
+    omnivoxPassword?: string
 
     @IsNumber()
     @IsOptional()

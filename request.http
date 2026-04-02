@@ -5,7 +5,7 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "user6@xyz.com",
+    "email": "user8@xyz.com",
     "password": "abc123",
     "nomComplet": "Haroune Belhachani",
     "omnivoxDA": "0981234",
@@ -18,16 +18,7 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "user6@xyz.com",
-    "password": "abc123"
-}
-
-### Login ADMIN (Change email if necessary)
-POST http://localhost:3000/users/signin
-content-type: application/json
-
-{
-    "email": "admin@xyz.com",
+    "email": "user7@xyz.com",
     "password": "abc123"
 }
 
@@ -39,6 +30,7 @@ POST http://localhost:3000/users/signout
 
 ### GET ONE User BY ID
 GET http://localhost:3000/users/26
+GET http://localhost:3000/users/2
 
 ### GET ALL Users (Requires Admin Guard)
 GET http://localhost:3000/users
@@ -54,9 +46,6 @@ content-type: application/json
 
 ### Delete User par ID
 DELETE http://localhost:3000/users/1
-
-### GET MESSAGE (ONLY ALLOWED IF LOGGED IN)
-GET http://localhost:3000/users/message
 
 
 ###             PROGRAMMABLE MODULE                     ###
@@ -89,3 +78,14 @@ GET http://localhost:3000/programmable
 
 ### Obtenir un programmable spécifique par id
 GET http://localhost:3000/programmable/1
+
+### Mettre à jour une activite
+PATCH http://localhost:3000/programmable/evenement/1
+content-type: application/json
+
+{
+    "nom": "Examen Final de Prog",
+    "description": "Examen de fin de session",
+    "dateDepart": "2026-05-15T09:00:00Z",
+    "dureeJours": 1
+}
