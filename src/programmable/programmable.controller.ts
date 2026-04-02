@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ProgrammableService } from './programmable.service';
 import { CreateEvenementDto } from './dtos/create-evenement.dto';
 import { CreateActiviteDto } from './dtos/create-activite.dto';
@@ -29,13 +29,18 @@ export class ProgrammableController {
     return this.programmableService.createActivite(createDto);
   }
 
-  @Patch('activite')
-  updateActivite(@Body() updateDto: CreateActiviteDto){
-    //return this.programmableService.updateActivite();
+  @Patch('activite/:id')
+  updateActivite(@Body() activite: CreateActiviteDto, @Param("id") id : string){
+    return this.programmableService.updateActivite(id, activite);
   }
 
   @Patch('evenement/:id')
-  updateEvenement(@Body() createDto: CreateEvenementDto, @Param("id") id : string){
-    return this.programmableService.updateEvenement(id, createDto);
+  updateEvenement(@Body() evenement: CreateEvenementDto, @Param("id") id : string){
+    return this.programmableService.updateEvenement(id, evenement);
+  }
+
+  @Delete(':id')
+  deleteProgrammable(@Param("id") id : string){
+    return this.programmableService.deleteProgrammable(id)
   }
 }
