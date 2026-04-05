@@ -19,7 +19,6 @@ import { InvitationModule } from './invitation/invitation.module';
       }),
       ProgrammableModule,
       InvitationModule,
-      UsersModule,
       AuthModule
     ],
   controllers: [AppController],

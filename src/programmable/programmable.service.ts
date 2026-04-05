@@ -22,7 +22,7 @@ export class ProgrammableService {
     return this.programmableRepo.find();
   }
 
-  async findOne(id: string): Promise<Programmable> {
+  async findOne(id: number): Promise<Programmable> {
     const programmable = await this.programmableRepo.findOne({ where: { id } });
     if (!programmable) {
       throw new NotFoundException(`Programmable avec id ${id} non trouve`);
@@ -40,8 +40,8 @@ export class ProgrammableService {
     return this.activiteRepo.save(activite);
   }
 
-  async updateEvenement(id: string, attrs: Partial<CreateEvenementDto>): Promise<Evenement> {
-    let evenement = await this.findOne(id)
+  async updateEvenement(id: number, attrs: Partial<CreateEvenementDto>): Promise<Evenement> {
+    let evenement = await this.evenementRepo.findOne({ where: { id } })
     if (!evenement) {
       throw new NotFoundException(`Evenement avec id ${id} non trouve`);
     }
@@ -49,8 +49,8 @@ export class ProgrammableService {
     return this.evenementRepo.save(evenement)
   }
 
-  async updateActivite(id: string, attrs: Partial<CreateActiviteDto>): Promise<Activite> {
-    let activite = await this.findOne(id)
+  async updateActivite(id: number, attrs: Partial<CreateActiviteDto>): Promise<Activite> {
+    let activite = await this.activiteRepo.findOne({ where: { id } })
     if (!activite) {
       throw new NotFoundException(`Activite avec id ${id} non trouve`);
     }
@@ -58,12 +58,8 @@ export class ProgrammableService {
     return this.activiteRepo.save(activite)
   }
 
-  async deleteProgrammable(id : string): Promise<Programmable> {
-
+  async deleteProgrammable(id: number): Promise<Programmable> {
     const programmable = await this.findOne(id)
-
-    if (!programmable) { throw new NotFoundException(`Activite avec id ${id} non trouve`); }
-
     return this.programmableRepo.remove(programmable)
   }
 }
