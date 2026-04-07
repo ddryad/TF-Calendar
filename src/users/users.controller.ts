@@ -1,77 +1,45 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Session, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Body, Post, Patch, Param, Get, Session, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDTO } from './dtos/create-user.dto';
-import { Serialize } from 'src/interceptors/SerializeInterceptor';
-import { UserDTO } from './dtos/user.dto';
-import { AuthService } from './auth.service';
-import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
-import { AllowLoggedIn, AuthGuard } from 'src/guards/auth-guard';
-import { AdminGuard } from 'src/guards/admin-guard';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { UserDTO } from './dtos/user.dto';
+import { UpdateUserDTO } from './dtos/update-user.dto';
 
 @Controller('users')
 export class UsersController {
 
-    constructor(private userService: UsersService, private authService: AuthService) { }
+    constructor(private service: UsersService) { }
 
-    @Post("/signup")
-    async signUp(@Body() body: CreateUserDTO, @Session() session: any) {
-        const user = await this.authService.signUp(body.email, body.password)
-        session.userId = user.id
-        return user
-    }
-
-    @AllowLoggedIn()
-    @Get("/message")
-    async getMessage(){
-
-        return "ABCDEF"
-    }
-
-    @Post("/signin")
-    async signIn(@Body() body: CreateUserDTO, @Session() session: any) {
-
-        const user = await this.authService.signIn(body.email, body.password)
-        session.userId = user.id;
-
-        return user
-    }
-
+    @UseGuards(AuthGuard)
     @Post("/signout")
-    logout(@Session() session: any) {
+    async signout(@Session() session: any) {
         session.userId = null
     }
 
-
+    @Serialize(UserDTO)
     @Get("/whoami")
-    whoami(@CurrentUser() user : User) {
-        console.log(user)
-        return user
-    }
-
-    @UseGuards(AdminGuard)
-    @Get("")
-    getAllUsers() {
-        return this.userService.findAll()
+    async whoAmI(@CurrentUser() user: User) {
+        return user;
     }
 
     @Serialize(UserDTO)
     @Get("/:id")
-    findOneUser(@Param("id") id: number) {
-
-        return this.userService.findOneUser(id)
+    async getOne(@Param('id') id: number) {
+        return this.service.findOneUser(id)
     }
 
-    @Delete("/:id")
-    deleteOne(@Param("id") id: number) {
-
-        return this.userService.deleteOneUser(id)
+    @UseGuards(AuthGuard)
+    @Patch('/:id')
+    updateUser(@Param('id') id: string, @Body() body: UpdateUserDTO) {
+        return this.service.updateUser(parseInt(id), body)
     }
 
-    @Patch("/:id")
-    updateOne(@Param("id") id: number, @Body() updatedUserDTO: CreateUserDTO) {
-        console.log(updatedUserDTO)
-        return this.userService.updateUser(id, updatedUserDTO)
+    @Serialize(UserDTO)
+    @Get("")
+    getAllUsers() {
+        return this.service.findAll()
     }
 
 }

@@ -2,17 +2,17 @@ import { Exclude } from "class-transformer";
 import { AfterInsert, Column, Entity, PrimaryGeneratedColumn, ManyToMany, JoinTable } from "typeorm";
 
 @Entity()
-export class User{
+export class User {
 
     @PrimaryGeneratedColumn()
-    id : number
-    
+    id: number
+
     @Column()
-    email : string
-    
+    email: string
+
     @Exclude()
     @Column()
-    password : string
+    passwordHash: string
 
     @Column({ nullable: true })
     nomComplet: string
@@ -32,8 +32,9 @@ export class User{
     friends: User[]
 
     @AfterInsert()
-    verify(){
-        console.log(`User with id : ${this.id}, email : ${this.email} has used password : ${this.password}`)
+    verify() {
+        console.log(`User with id : ${this.id}, email : ${this.email} has used password : ${this.passwordHash}`)
     }
-    
+
+
 }

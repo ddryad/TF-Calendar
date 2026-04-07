@@ -1,0 +1,23 @@
+### crée une invitation
+POST http://localhost:3000/invitation
+content-type: application/json
+
+{
+  "senderId": "1",
+  "invitedUserId": "2",
+  "type": "invitation"
+}
+
+### Get toutes les invitations
+GET http://localhost:3000/invitation
+
+
+### Get une invitation
+GET http://localhost:3000/invitation/1
+
+
+### accepter une  invitation
+PATCH http://localhost:3000/invitation/2/accept
+
+### refuser une  invitation
+PATCH http://localhost:3000/invitation/1/refuse

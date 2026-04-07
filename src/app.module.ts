@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { ProgrammableModule } from './programmable/programmable.module';
 import { InvitationModule } from './invitation/invitation.module';
 
 @Module({
@@ -15,9 +17,12 @@ import { InvitationModule } from './invitation/invitation.module';
         autoLoadEntities: true,
         synchronize: true
       }),
-      InvitationModule
+      ProgrammableModule,
+      InvitationModule,
+      AuthModule
     ],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule { }

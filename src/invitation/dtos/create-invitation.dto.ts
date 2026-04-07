@@ -1,13 +1,13 @@
-import { IsEnum, isString, IsNotEmpty, IsDate, IsString } from "class-validator";
+import { IsEnum, IsNumber, IsNotEmpty, IsDate, IsString } from "class-validator";
 import { InvitationStatut } from "../enums/invitation-statut.enum";
 
 export class CreateInvitationDto{
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
     senderId: number;
 
-    @IsString()
+    @IsNumber()
     @IsNotEmpty()
     invitedUserId: number;
 
