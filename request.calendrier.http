@@ -32,7 +32,18 @@ GET http://localhost:3000/calendrier/me
 GET http://localhost:3000/calendrier/1
 
 
-### ---- 3. VÉRIFIER LA GARDE ----
+### ---- 3. SUPPRIMER ----
+
+### Supprimer mon calendrier (utilisateur connecté
+DELETE http://localhost:3000/calendrier/me
+
+###
+
+### Supprimer un calendrier par id
+DELETE http://localhost:3000/calendrier/1
+
+
+### ---- 4. VÉRIFIER LA GARDE ----
 
 ### Signout
 POST http://localhost:3000/users/signout

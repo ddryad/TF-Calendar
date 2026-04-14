@@ -37,4 +37,10 @@ export class CalendrierService {
     async findByUser(userId: number): Promise<Calendrier | null> {
         return this.calendrierRepo.findOne({ where: { userId } });
     }
+
+    async remove(id: number, userId: number): Promise<void> {
+        const calendrier = await this.findOne(id);
+        await this.calendrierRepo.remove(calendrier);
+        await this.usersService.updateUser(userId, { calendrierId: null });
+    }
 }
