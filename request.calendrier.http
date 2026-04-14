@@ -1,0 +1,43 @@
+### ---- 0. AUTHENTIFICATION ----
+
+### Signin (obtenir la session)
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+    "email": "haroune@xyz.com",
+    "password": "abc123"
+}
+
+
+### ---- 1. CRÉER ----
+
+### Créer un calendrier (userId injecté depuis la session)
+POST http://localhost:3000/calendrier
+content-type: application/json
+
+{
+    "nom": "Mon Calendrier"
+}
+
+
+### ---- 2. LIRE ----
+
+### Obtenir mon calendrier (utilisateur connecté)
+GET http://localhost:3000/calendrier/me
+
+###
+
+### Obtenir un calendrier par id
+GET http://localhost:3000/calendrier/1
+
+
+### ---- 3. VÉRIFIER LA GARDE ----
+
+### Signout
+POST http://localhost:3000/users/signout
+
+###
+
+### Cette req doit retourner 403 si déconnecte
+GET http://localhost:3000/calendrier/me
