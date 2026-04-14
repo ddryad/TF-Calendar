@@ -31,7 +31,6 @@ POST http://localhost:3000/users/signout
 ### GET ONE User BY ID
 GET http://localhost:3000/users/26
 
-### GET ALL Users (Requires Admin Guard)
 GET http://localhost:3000/users
 
 ### Update User par ID
