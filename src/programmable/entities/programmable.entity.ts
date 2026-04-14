@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn, TableInheritance } from 'typeor
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export abstract class Programmable {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   nom: string;
@@ -14,4 +14,7 @@ export abstract class Programmable {
 
   @Column()
   dateDepart: Date;
+
+  @Column()
+  userId: number;
 }
