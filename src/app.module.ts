@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ProgrammableModule } from './programmable/programmable.module';
 import { InvitationModule } from './invitation/invitation.module';
+import { CalendrierModule } from './calendrier/calendrier.module';
 
 @Module({
   imports:
@@ -19,7 +20,8 @@ import { InvitationModule } from './invitation/invitation.module';
       }),
       ProgrammableModule,
       InvitationModule,
-      AuthModule
+      AuthModule,
+      CalendrierModule
     ],
   controllers: [AppController],
   providers: [AppService],
