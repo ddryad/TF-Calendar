@@ -5,7 +5,7 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "nouveau@xyz.com",
+    "email": "haroune@xyz.com",
     "password": "abc123"
 }
 
@@ -19,7 +19,7 @@ content-type: application/json
 {
     "nom": "Examen Final",
     "description": "Examen de fin de session",
-    "dateDepart": new Date(),
+    "dateDepart": "2026-05-15T09:00:00Z",
     "dureeJours": 1
 }
 
