@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/user.entity';
 
+// on remarque ici que j'utilise des dtos + currentuser sur certaines routes pour empêcher d'usurper l'identite d'un utilisateur
 @UseGuards(AuthGuard)
 @Controller('programmable')
 export class ProgrammableController {
