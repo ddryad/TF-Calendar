@@ -1,6 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString, IsOptional, IsNumber } from "class-validator";
 
-
 export class CreateUserDTO{
 
 
@@ -22,7 +21,7 @@ export class CreateUserDTO{
 
     @IsString()
     @IsOptional()
-    omnivoxPasswordHash?: string
+    omnivoxPassword?: string
 
     @IsNumber()
     @IsOptional()

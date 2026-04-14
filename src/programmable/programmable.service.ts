@@ -34,6 +34,10 @@ export class ProgrammableService {
     return programmable;
   }
 
+  async findAllByUser(userId: number): Promise<Programmable[]> {
+    return this.programmableRepo.find({ where: { userId } });
+  }
+
   async createEvenement(createDto: CreateEvenementDto, userId: number): Promise<Evenement> {
     const evenement = this.evenementRepo.create({ ...createDto, userId });
     return this.evenementRepo.save(evenement);
@@ -44,13 +48,27 @@ export class ProgrammableService {
     return this.activiteRepo.save(activite);
   }
 
-  async findAllByUser(userId: number): Promise<Programmable[]> {
-    return this.programmableRepo.find({ where: { userId } });
-  }
-
   async createActiviteGroupe(createDto: CreateActiviteGroupeDto, userId: number): Promise<ActiviteGroupe> {
     const activiteGroupe = this.activiteGroupeRepo.create({ ...createDto, userId });
     return this.activiteGroupeRepo.save(activiteGroupe);
+  }
+
+  async updateEvenement(id: number, attrs: Partial<CreateEvenementDto>): Promise<Evenement> {
+    const evenement = await this.evenementRepo.findOne({ where: { id } });
+    if (!evenement) {
+      throw new NotFoundException(`Evenement avec id ${id} non trouve`);
+    }
+    Object.assign(evenement, attrs);
+    return this.evenementRepo.save(evenement);
+  }
+
+  async updateActivite(id: number, attrs: Partial<CreateActiviteDto>): Promise<Activite> {
+    const activite = await this.activiteRepo.findOne({ where: { id } });
+    if (!activite) {
+      throw new NotFoundException(`Activite avec id ${id} non trouve`);
+    }
+    Object.assign(activite, attrs);
+    return this.activiteRepo.save(activite);
   }
 
   async updateActiviteGroupe(id: number, updateDto: CreateActiviteGroupeDto): Promise<ActiviteGroupe> {
@@ -60,5 +78,10 @@ export class ProgrammableService {
     }
     Object.assign(activiteGroupe, updateDto);
     return this.activiteGroupeRepo.save(activiteGroupe);
+  }
+
+  async deleteProgrammable(id: number): Promise<Programmable> {
+    const programmable = await this.findOne(id);
+    return this.programmableRepo.remove(programmable);
   }
 }

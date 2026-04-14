@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { User } from './user.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDTO } from './dtos/create-user.dto';
 
 @Injectable()
@@ -17,7 +17,15 @@ export class UsersService {
     }
 
     async createUser(userDTO: CreateUserDTO) {
-        const user = this.usersRepository.create({ email: userDTO.email, password: userDTO.password })
+        const user = this.usersRepository.create(
+            { 
+                email: userDTO.email, 
+                passwordHash: userDTO.password, 
+                nomComplet: userDTO.nomComplet, 
+                omnivoxDA: userDTO.omnivoxDA,
+                calendrierId : userDTO.calendrierId,
+                omnivoxPasswordHash : userDTO.omnivoxPassword
+            })
         await this.usersRepository.save(user)
         return user
     }
@@ -55,7 +63,7 @@ export class UsersService {
 
         user = Object.assign(user, attrs)
 
-        this.usersRepository.save(user)
+        return await this.usersRepository.save(user)
     }
 
 }

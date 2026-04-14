@@ -15,6 +15,7 @@ export abstract class Programmable {
   @Column()
   dateDepart: Date;
 
+  // Identifiant du propriétaire — injecté depuis la session, jamais du body
   @Column()
   userId: number;
 }
