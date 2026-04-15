@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
+import { Calendrier } from '../../calendrier/calendrier.entity';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -15,7 +16,13 @@ export abstract class Programmable {
   @Column()
   dateDepart: Date;
 
-  // Identifiant du propriétaire — injecté depuis la session, jamais du body
   @Column()
   userId: number;
+
+  @Column({ nullable: true })
+  calendrierId: number;
+
+  @ManyToOne(() => Calendrier, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'calendrierId' })
+  calendrier: Calendrier;
 }

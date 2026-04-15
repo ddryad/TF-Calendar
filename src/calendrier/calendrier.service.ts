@@ -20,7 +20,7 @@ export class CalendrierService {
             throw new ConflictException('Cet utilisateur possède déjà un calendrier');
         }
 
-        const calendrier = this.calendrierRepo.create({ ...dto, userId });
+        const calendrier = this.calendrierRepo.create({ ...dto, ownerId: userId });
         const saved = await this.calendrierRepo.save(calendrier);
         await this.usersService.updateUser(userId, { calendrierId: saved.id });
         return saved;
@@ -35,7 +35,7 @@ export class CalendrierService {
     }
 
     async findByUser(userId: number): Promise<Calendrier | null> {
-        return this.calendrierRepo.findOne({ where: { userId } });
+        return this.calendrierRepo.findOne({ where: { ownerId: userId } });
     }
 
     async remove(id: number, userId: number): Promise<void> {
