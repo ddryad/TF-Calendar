@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Param, Body, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Param, Body, ParseIntPipe, UseGuards, Delete, Req } from '@nestjs/common';
 import { InvitationService } from './invitation.service';
 import { CreateInvitationDto } from './dtos/create-invitation.dto';
 import { UpdateInvitationDto } from './dtos/update-invitation.dto';
@@ -24,10 +24,22 @@ export class InvitationController {
    findAll(){
     return this.invitationService.findAll();
    }
+
+   @Get('received/:userId') //mes invitations reçu
+   getMyInvitations(@Param('userId', ParseIntPipe) userId: number) {
+   return this.invitationService.getMyInvitations(userId);
+   }
+
+   @Get('sent/:userId') //mes invitations envoyées
+   getSent(@Param('userId', ParseIntPipe) userId: number) {
+   return this.invitationService.getSentInvitations(userId);
+   }
+   
    @Get(':id') // recupère une invitation par son id 
    findOne(@Param('id', ParseIntPipe) id: number){
     return this.invitationService.findOne(id);
    }
+
 
    @Post() // crée une invitation 
    create(@Body() invitation: CreateInvitationDto){
@@ -43,6 +55,11 @@ export class InvitationController {
    refuse(@Param('id', ParseIntPipe) id: number){
     return this.invitationService.refuseInvitation(id);
    }
+
+   @Delete(':id')
+    remove(@Param('id') id: number) {
+    return this.invitationService.remove(id);
+    }
 
 
 }

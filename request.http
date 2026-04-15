@@ -10,7 +10,7 @@ content-type: application/json
     "nomComplet": "Haroune Belhachani",
     "omnivoxDA": "0981234",
     "omnivoxPassword": "omnivoxPassword",
-    "calendrierId": 1
+    "calendrierId": 2
 }
 
 ### Login 
@@ -42,5 +42,9 @@ content-type: application/json
     "nomComplet": "Updated Name"
 }
 
+<<<<<<< HEAD
+###trouver tous les users
+GET  http://localhost:3005/users/getAll
+=======
 ### Delete User par ID
 DELETE http://localhost:3000/users/1
