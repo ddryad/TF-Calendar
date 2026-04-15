@@ -38,18 +38,18 @@ export class ProgrammableService {
     return this.programmableRepo.find({ where: { userId } });
   }
 
-  async createEvenement(createDto: CreateEvenementDto, userId: number): Promise<Evenement> {
-    const evenement = this.evenementRepo.create({ ...createDto, userId });
+  async createEvenement(createDto: CreateEvenementDto, userId: number, calendrierId?: number | null): Promise<Evenement> {
+    const evenement = this.evenementRepo.create({ ...createDto, userId, calendrierId: calendrierId ?? null });
     return this.evenementRepo.save(evenement);
   }
 
-  async createActivite(createDto: CreateActiviteDto, userId: number): Promise<Activite> {
-    const activite = this.activiteRepo.create({ ...createDto, userId });
+  async createActivite(createDto: CreateActiviteDto, userId: number, calendrierId?: number | null): Promise<Activite> {
+    const activite = this.activiteRepo.create({ ...createDto, userId, calendrierId: calendrierId ?? null });
     return this.activiteRepo.save(activite);
   }
 
-  async createActiviteGroupe(createDto: CreateActiviteGroupeDto, userId: number): Promise<ActiviteGroupe> {
-    const activiteGroupe = this.activiteGroupeRepo.create({ ...createDto, userId });
+  async createActiviteGroupe(createDto: CreateActiviteGroupeDto, userId: number, calendrierId?: number | null): Promise<ActiviteGroupe> {
+    const activiteGroupe = this.activiteGroupeRepo.create({ ...createDto, userId, calendrierId: calendrierId ?? null });
     return this.activiteGroupeRepo.save(activiteGroupe);
   }
 

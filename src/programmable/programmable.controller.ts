@@ -19,7 +19,6 @@ export class ProgrammableController {
     return this.programmableService.findAll();
   }
 
-  // routes avec préfixe littéral AVANT :id (sinon NestJS les intercepte jamais)
   @Get('user/:userId')
   findAllByUser(@Param('userId', ParseIntPipe) userId: number) {
     return this.programmableService.findAllByUser(userId);
@@ -32,17 +31,17 @@ export class ProgrammableController {
 
   @Post('evenement')
   createEvenement(@CurrentUser() user: User, @Body() createDto: CreateEvenementDto) {
-    return this.programmableService.createEvenement(createDto, user.id);
+    return this.programmableService.createEvenement(createDto, user.id, user.calendrierId);
   }
 
   @Post('activite')
   createActivite(@CurrentUser() user: User, @Body() createDto: CreateActiviteDto) {
-    return this.programmableService.createActivite(createDto, user.id);
+    return this.programmableService.createActivite(createDto, user.id, user.calendrierId);
   }
 
   @Post('activite-groupe')
   createActiviteGroupe(@CurrentUser() user: User, @Body() createDto: CreateActiviteGroupeDto) {
-    return this.programmableService.createActiviteGroupe(createDto, user.id);
+    return this.programmableService.createActiviteGroupe(createDto, user.id, user.calendrierId);
   }
 
   @Patch('activite-groupe/:id')

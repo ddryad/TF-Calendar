@@ -19,8 +19,8 @@ export abstract class Programmable {
   @Column()
   userId: number;
 
-  @Column({ nullable: true })
-  calendrierId: number;
+  @Column({ nullable: true, type: 'int' })
+  calendrierId: number | null;
 
   @ManyToOne(() => Calendrier, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'calendrierId' })
