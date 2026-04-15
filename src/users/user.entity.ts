@@ -24,8 +24,9 @@ export class User {
     @Column({ nullable: true })
     omnivoxPasswordHash: string
 
-    @Column({ nullable: true })
-    calendrierId: number
+    //type union pour permettre valeur nulle quand on delete le calendrier du user ou quand il est pas encore crée
+    @Column({ nullable: true, type: 'int' })
+    calendrierId: number | null
 
     @ManyToMany(() => User)
     @JoinTable()
