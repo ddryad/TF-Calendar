@@ -3,6 +3,6 @@ import { CreateProgrammableDto } from './create-programmable.dto';
 
 export class CreateEvenementDto extends CreateProgrammableDto {
   @IsInt()
-  @Min(0)
+  @Min(1)
   dureeJours: number;
 }
