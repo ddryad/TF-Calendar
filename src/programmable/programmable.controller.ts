@@ -45,22 +45,22 @@ export class ProgrammableController {
   }
 
   @Patch('activite-groupe/:id')
-  updateActiviteGroupe(@Param('id', ParseIntPipe) id: number, @Body() updateDto: CreateActiviteGroupeDto) {
-    return this.programmableService.updateActiviteGroupe(id, updateDto);
+  updateActiviteGroupe(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User, @Body() updateDto: CreateActiviteGroupeDto) {
+    return this.programmableService.updateActiviteGroupe(id, updateDto, user.id);
   }
 
   @Patch('activite/:id')
-  updateActivite(@Param('id', ParseIntPipe) id: number, @Body() activite: CreateActiviteDto) {
-    return this.programmableService.updateActivite(id, activite);
+  updateActivite(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User, @Body() activite: CreateActiviteDto) {
+    return this.programmableService.updateActivite(id, activite, user.id);
   }
 
   @Patch('evenement/:id')
-  updateEvenement(@Param('id', ParseIntPipe) id: number, @Body() evenement: CreateEvenementDto) {
-    return this.programmableService.updateEvenement(id, evenement);
+  updateEvenement(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User, @Body() evenement: CreateEvenementDto) {
+    return this.programmableService.updateEvenement(id, evenement, user.id);
   }
 
   @Delete(':id')
-  deleteProgrammable(@Param('id', ParseIntPipe) id: number) {
-    return this.programmableService.deleteProgrammable(id);
+  deleteProgrammable(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
+    return this.programmableService.deleteProgrammable(id, user.id);
   }
 }
