@@ -26,8 +26,9 @@ export class ProgrammableService {
     return this.programmableRepo.find();
   }
 
-  async findOne(id: number): Promise<Programmable> {
-    const programmable = await this.programmableRepo.findOne({ where: { id } });
+  async findOne(id: number, userId?: number): Promise<Programmable> {
+    const whereClause = userId ? { id, userId } : { id };
+    const programmable = await this.programmableRepo.findOne({ where: whereClause });
     if (!programmable) {
       throw new NotFoundException(`Programmable avec id ${id} non trouve`);
     }
@@ -55,8 +56,8 @@ export class ProgrammableService {
     return this.activiteGroupeRepo.save(activiteGroupe);
   }
 
-  async updateEvenement(id: number, attrs: Partial<CreateEvenementDto>): Promise<Evenement> {
-    const evenement = await this.evenementRepo.findOne({ where: { id } });
+  async updateEvenement(id: number, attrs: Partial<CreateEvenementDto>, userId: number): Promise<Evenement> {
+    const evenement = await this.evenementRepo.findOne({ where: { id, userId } });
     if (!evenement) {
       throw new NotFoundException(`Evenement avec id ${id} non trouve`);
     }
@@ -64,8 +65,8 @@ export class ProgrammableService {
     return this.evenementRepo.save(evenement);
   }
 
-  async updateActivite(id: number, attrs: Partial<CreateActiviteDto>): Promise<Activite> {
-    const activite = await this.activiteRepo.findOne({ where: { id } });
+  async updateActivite(id: number, attrs: Partial<CreateActiviteDto>, userId: number): Promise<Activite> {
+    const activite = await this.activiteRepo.findOne({ where: { id, userId } });
     if (!activite) {
       throw new NotFoundException(`Activite avec id ${id} non trouve`);
     }
@@ -76,8 +77,8 @@ export class ProgrammableService {
     return this.activiteRepo.save(activite);
   }
 
-  async updateActiviteGroupe(id: number, updateDto: CreateActiviteGroupeDto): Promise<ActiviteGroupe> {
-    const activiteGroupe = await this.activiteGroupeRepo.findOne({ where: { id } });
+  async updateActiviteGroupe(id: number, updateDto: CreateActiviteGroupeDto, userId: number): Promise<ActiviteGroupe> {
+    const activiteGroupe = await this.activiteGroupeRepo.findOne({ where: { id, userId } });
     if (!activiteGroupe) {
       throw new NotFoundException(`ActiviteGroupe avec id ${id} non trouve`);
     }
@@ -86,8 +87,8 @@ export class ProgrammableService {
     return this.activiteGroupeRepo.save(activiteGroupe);
   }
 
-  async deleteProgrammable(id: number): Promise<Programmable> {
-    const programmable = await this.findOne(id);
+  async deleteProgrammable(id: number, userId: number): Promise<Programmable> {
+    const programmable = await this.findOne(id, userId);
     return this.programmableRepo.remove(programmable);
   }
 
