@@ -5,12 +5,12 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "user8@xyz.com",
-    "password": "abc123",
-    "nomComplet": "Haroune Belhachani",
-    "omnivoxDA": "0981234",
+    "email": "user9@xyz.com",
+    "password": "abc-123",
+    "nomComplet": "Salah Hajjar",
+    "omnivoxDA": "2169461",
     "omnivoxPassword": "omnivoxPassword",
-    "calendrierId": 1
+    "calendrierId": 2
 }
 
 ### Login 
@@ -18,8 +18,8 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "user8@xyz.com",
-    "password": "abc123"
+    "email": "user9@xyz.com",
+    "password": "abc-123"
 }
 
 ### Who Am I (Requires valid cookie session)

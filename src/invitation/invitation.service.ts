@@ -5,6 +5,7 @@ import { Invitation } from './invitation.entity';
 import { CreateInvitationDto } from './dtos/create-invitation.dto';
 import { UpdateInvitationDto } from './dtos/update-invitation.dto';
 import { InvitationStatut } from './enums/invitation-statut.enum';
+import { InvitationFactory } from "./factory/invitation.factory";
 
 @Injectable()
 export class InvitationService {
@@ -25,15 +26,30 @@ export class InvitationService {
         return invitation
     }
 
-    async createInvitation(invitationDto: CreateInvitationDto){
-        const invitation = this.invitationRepository.create({
-           senderId: invitationDto.senderId,
-           invitedUserId: invitationDto.invitedUserId,
-           type: invitationDto.type,
-           statut: InvitationStatut.PENDING,
-           sentAt: new Date(),
+    async getMyInvitations(userId: number) {
+        return this.invitationRepository.find({
+          where: { invitedUserId: userId }
         });
+      }
 
+      async getSentInvitations(userId: number) {
+        return this.invitationRepository.find({
+          where: { senderId: userId }
+        });
+      }
+
+    async createInvitation(invitationDto: CreateInvitationDto){
+        const factory = new InvitationFactory();
+        const specificFactory = factory.create(invitationDto.type);
+    
+        const baseData = specificFactory.create(invitationDto);
+    
+        const invitation = this.invitationRepository.create({
+            ...baseData,
+            statut: InvitationStatut.PENDING,
+            sentAt: new Date(),
+        });
+    
         return this.invitationRepository.save(invitation);
     }
 
@@ -57,6 +73,11 @@ export class InvitationService {
 
         return this.invitationRepository.save(invitation);
     }
+
+    async remove(id: number) {
+        const invitation = await this.findOne(id);
+        return this.invitationRepository.remove(invitation);
+      }
 
     
 
