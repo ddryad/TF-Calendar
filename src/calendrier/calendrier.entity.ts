@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Evenement } from '../programmable/entities/evenement.entity';
-import { Activite } from '../programmable/entities/activite.entity';
+import type { Evenement } from '../programmable/entities/evenement.entity';
+import type { Activite } from '../programmable/entities/activite.entity';
 
 @Entity()
 export class Calendrier {
@@ -14,9 +14,9 @@ export class Calendrier {
     @Column()
     ownerId: number;
 
-    @OneToMany(() => Evenement, (e) => e.calendrier, { cascade: true, eager: false })
+    @OneToMany('Evenement', (e: Evenement) => e.calendrier, { cascade: true, eager: false })
     evenements: Evenement[];
 
-    @OneToMany(() => Activite, (a) => a.calendrier, { cascade: true, eager: false })
+    @OneToMany('Activite', (a: Activite) => a.calendrier, { cascade: true, eager: false })
     activites: Activite[];
 }

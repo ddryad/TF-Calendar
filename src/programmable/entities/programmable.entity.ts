@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
-import { Calendrier } from '../../calendrier/calendrier.entity';
+import type { Calendrier } from '../../calendrier/calendrier.entity';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
@@ -22,7 +22,7 @@ export abstract class Programmable {
   @Column({ nullable: true, type: 'int' })
   calendrierId: number | null;
 
-  @ManyToOne(() => Calendrier, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne('Calendrier', { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn({ name: 'calendrierId' })
   calendrier: Calendrier;
 }
