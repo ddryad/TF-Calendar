@@ -16,7 +16,7 @@ export class UpdateUserDTO{
 
     @IsString()
     @IsOptional()
-    omnivoxDA?: string
+    omnivoxDA?: number
 
     @IsString()
     @IsOptional()
