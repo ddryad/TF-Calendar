@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Programmable } from './entities/programmable.entity';
@@ -44,11 +44,13 @@ export class ProgrammableService {
   }
 
   async createActivite(createDto: CreateActiviteDto, userId: number, calendrierId?: number | null): Promise<Activite> {
+    await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
     const activite = this.activiteRepo.create({ ...createDto, userId, calendrierId: calendrierId ?? null });
     return this.activiteRepo.save(activite);
   }
 
   async createActiviteGroupe(createDto: CreateActiviteGroupeDto, userId: number, calendrierId?: number | null): Promise<ActiviteGroupe> {
+    await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
     const activiteGroupe = this.activiteGroupeRepo.create({ ...createDto, userId, calendrierId: calendrierId ?? null });
     return this.activiteGroupeRepo.save(activiteGroupe);
   }
@@ -67,6 +69,9 @@ export class ProgrammableService {
     if (!activite) {
       throw new NotFoundException(`Activite avec id ${id} non trouve`);
     }
+    const dateDepart = attrs.dateDepart ?? activite.dateDepart;
+    const dureeHeures = attrs.dureeHeures ?? activite.dureeHeures;
+    await this.checkChevauchement(activite.userId, dateDepart, dureeHeures, id);
     Object.assign(activite, attrs);
     return this.activiteRepo.save(activite);
   }
@@ -76,6 +81,7 @@ export class ProgrammableService {
     if (!activiteGroupe) {
       throw new NotFoundException(`ActiviteGroupe avec id ${id} non trouve`);
     }
+    await this.checkChevauchement(activiteGroupe.userId, updateDto.dateDepart, updateDto.dureeHeures, id);
     Object.assign(activiteGroupe, updateDto);
     return this.activiteGroupeRepo.save(activiteGroupe);
   }
@@ -83,5 +89,30 @@ export class ProgrammableService {
   async deleteProgrammable(id: number): Promise<Programmable> {
     const programmable = await this.findOne(id);
     return this.programmableRepo.remove(programmable);
+  }
+
+  private async checkChevauchement(
+    userId: number,
+    dateDepart: Date,
+    dureeHeures: number,
+    excludeId?: number,
+  ): Promise<void> {
+    const nouveauTempsDebut = new Date(dateDepart).getTime();
+    const nouveauTempsFin = nouveauTempsDebut + dureeHeures * 3_600_000;
+
+    const activites = await this.activiteRepo.find({ where: { userId } });
+
+    for (const a of activites) {
+      if (excludeId && a.id === excludeId) continue;
+
+      const tempsActiviteDebut = new Date(a.dateDepart).getTime();
+      const tempsActiviteFin = tempsActiviteDebut + a.dureeHeures * 3_600_000;
+
+      if (nouveauTempsDebut < tempsActiviteFin && nouveauTempsFin > tempsActiviteDebut) {
+        throw new ConflictException(
+          `Chevauchement avec l'activité "${a.nom}" (début : ${a.dateDepart})`,
+        );
+      }
+    }
   }
 }
