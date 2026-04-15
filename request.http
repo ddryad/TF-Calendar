@@ -79,4 +79,5 @@ GET http://localhost:3000/programmable
 GET http://localhost:3000/programmable/1
 
 
+### Obtenir cours
 GET http://localhost:3000/Omnivox/cours
