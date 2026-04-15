@@ -18,7 +18,7 @@ export class User{
     nomComplet: string
 
     @Column({ nullable: true })
-    omnivoxDA: string
+    omnivoxDA: number
 
     @Exclude()
     @Column({ nullable: true })

@@ -5,11 +5,11 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "user7@xyz.com",
+    "email": "useromni@xyz.com",
     "password": "abc123",
     "nomComplet": "Haroune Belhachani",
-    "omnivoxDA": "0981234",
-    "omnivoxPasswordHash": "somehash",
+    "omnivoxDA": "6304455",
+    "omnivoxPasswordHash": "ryad2007",
     "calendrierId": 1
 }
 
@@ -29,7 +29,7 @@ GET http://localhost:3000/users/whoami
 POST http://localhost:3000/users/signout
 
 ### GET ONE User BY ID
-GET http://localhost:3000/users/1
+GET http://localhost:3000/users/4
 
 ### GET ALL Users (Requires Admin Guard)
 GET http://localhost:3000/users
@@ -44,7 +44,7 @@ content-type: application/json
 }
 
 ### Delete User par ID
-DELETE http://localhost:3000/users/1
+DELETE http://localhost:3000/users/27
 
 
 ###             PROGRAMMABLE MODULE                     ###
@@ -77,3 +77,6 @@ GET http://localhost:3000/programmable
 
 ### Obtenir un programmable spécifique par id
 GET http://localhost:3000/programmable/1
+
+
+GET http://localhost:3000/Omnivox/cours
