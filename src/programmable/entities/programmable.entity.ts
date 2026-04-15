@@ -1,10 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, TableInheritance } from 'typeorm';
+import { Calendrier } from '../../calendrier/calendrier.entity';
 
 @Entity()
 @TableInheritance({ column: { type: 'varchar', name: 'type' } })
 export abstract class Programmable {
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   nom: string;
@@ -14,4 +15,14 @@ export abstract class Programmable {
 
   @Column()
   dateDepart: Date;
+
+  @Column()
+  userId: number;
+
+  @Column({ nullable: true, type: 'int' })
+  calendrierId: number | null;
+
+  @ManyToOne(() => Calendrier, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'calendrierId' })
+  calendrier: Calendrier;
 }

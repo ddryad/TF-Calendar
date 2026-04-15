@@ -47,7 +47,7 @@ export class AuthService {
             password : result,
             nomComplet : userDTO.nomComplet,
             omnivoxDA : userDTO.omnivoxDA,
-            omnivoxPasswordHash : userDTO.password,
+            omnivoxPassword : userDTO.password,
             calendrierId : userDTO.calendrierId
         })
 

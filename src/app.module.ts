@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ProgrammableModule } from './programmable/programmable.module';
 import { InvitationModule } from './invitation/invitation.module';
+import { CalendrierModule } from './calendrier/calendrier.module';
 import { OmnivoxModule } from './omnivox/omnivox.module';
 
 @Module({
@@ -20,8 +21,8 @@ import { OmnivoxModule } from './omnivox/omnivox.module';
       }),
       ProgrammableModule,
       InvitationModule,
-      UsersModule,
       AuthModule,
+      CalendrierModule,
       OmnivoxModule
     ],
   controllers: [AppController],

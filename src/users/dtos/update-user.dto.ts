@@ -8,7 +8,7 @@ export class UpdateUserDTO{
 
     @IsString()
     @IsOptional()
-    passwordHash?: string
+    password?: string
 
     @IsString()
     @IsOptional()
@@ -20,7 +20,7 @@ export class UpdateUserDTO{
 
     @IsString()
     @IsOptional()
-    omnivoxPasswordHash?: string
+    omnivoxPassword?: string
 
     @IsNumber()
     @IsOptional()

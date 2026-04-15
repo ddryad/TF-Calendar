@@ -1,0 +1,100 @@
+### ---- 0. AUTHENTIFICATION ----
+
+### Signin
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+    "email": "haroune@xyz.com",
+    "password": "abc123"
+}
+
+
+### ---- 1. CRÉER ----
+
+### Créer un Événement (userId injecté automatiquement via session)
+POST http://localhost:3000/programmable/evenement
+content-type: application/json
+
+{
+    "nom": "Examen Final",
+    "description": "Examen de fin de session",
+    "dateDepart": "2026-05-15T09:00:00Z",
+    "dureeJours": 1
+}
+
+###
+
+### Créer une Activité
+POST http://localhost:3000/programmable/activite
+content-type: application/json
+
+{
+    "nom": "Révision solo",
+    "description": "Étudier pour l'examen de programmation",
+    "dateDepart": "2026-05-10T14:00:00Z",
+    "dureeHeures": 3,
+    "priorite": "URGENT"
+}
+
+###
+
+### Creer une Activité de Groupe (avec participants)
+POST http://localhost:3000/programmable/activite-groupe
+content-type: application/json
+
+{
+    "nom": "Projet d'équipe",
+    "description": "Travail de session en groupe",
+    "dateDepart": "2026-05-12T10:00:00Z",
+    "dureeHeures": 4,
+    "priorite": "IMPORTANCE_MOYENNE",
+    "groupeId": 1,
+    "participantIds": [1, 2]
+}
+
+
+### ---- 2. LIRE ----
+
+### obtenir tous les programmables
+GET http://localhost:3000/programmable
+
+###
+
+### obtenir tous les programmables d'un utilisateur specifique (par userId)
+GET http://localhost:3000/programmable/user/1
+
+###
+
+### Obtenir un programmable par son id
+GET http://localhost:3000/programmable/1
+
+
+### ---- 3. MODIFIER ----
+
+### Modifier une Activité de Groupe (par id)
+PATCH http://localhost:3000/programmable/activite-groupe/1
+content-type: application/json
+
+{
+    "nom": "Projet d'équipe (modifié)",
+    "description": "Travail de session mis à jour",
+    "dateDepart": "2026-05-13T10:00:00Z",
+    "dureeHeures": 5,
+    "priorite": "URGENT",
+    "groupeId": 1,
+    "participantIds": [1, 2, 3]
+}
+
+
+### ---- 4. VÉRIFIER LA GARDE ----
+
+### Tester sans session (doit retourner 403)
+
+### Signout
+POST http://localhost:3000/users/signout
+
+###
+
+### Cette req doit echouer avec 403 si on est deconnecte
+GET http://localhost:3000/programmable

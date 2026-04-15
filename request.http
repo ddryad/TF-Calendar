@@ -5,11 +5,11 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "useromni@xyz.com",
+    "email": "user7@xyz.com",
     "password": "abc123",
     "nomComplet": "Haroune Belhachani",
-    "omnivoxDA": "6304455",
-    "omnivoxPasswordHash": "ryad2007",
+    "omnivoxDA": "0981234",
+    "omnivoxPasswordHash": "somehash",
     "calendrierId": 1
 }
 
@@ -18,7 +18,7 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "user6@xyz.com",
+    "email": "haroune@xyz.com",
     "password": "abc123"
 }
 
@@ -31,7 +31,6 @@ POST http://localhost:3000/users/signout
 ### GET ONE User BY ID
 GET http://localhost:3000/users/4
 
-### GET ALL Users (Requires Admin Guard)
 GET http://localhost:3000/users
 
 ### Update User par ID
@@ -43,41 +42,21 @@ content-type: application/json
     "nomComplet": "Updated Name"
 }
 
+###trouver tous les users
+GET  http://localhost:3005/users/getAll
+=======
 ### Delete User par ID
 DELETE http://localhost:3000/users/27
 
-
-###             PROGRAMMABLE MODULE                     ###
-
-### Créer un Événement
-POST http://localhost:3000/programmable/evenement
-content-type: application/json
-
-{
-    "nom": "Examen Final",
-    "description": "Examen de fin de session",
-    "dateDepart": "2026-05-15T09:00:00Z",
-    "dureeJours": 1
-}
-
-### Créer une Activité
-POST http://localhost:3000/programmable/activite
-content-type: application/json
-
-{
-    "nom": "Révision de groupe",
-    "description": "Étudier pour l'examen de programmation",
-    "dateDepart": "2026-05-10T14:00:00Z",
-    "dureeHeures": 3,
-    "priorite": "URGENT"
-}
-
-### Obtenir tous les programmables (Evenements et Activites )
-GET http://localhost:3000/programmable
-
-### Obtenir un programmable spécifique par id
-GET http://localhost:3000/programmable/1
-
-
-### Obtenir cours
+### get cours
 GET http://localhost:3000/Omnivox/cours
+
+
+### get cours straight from api
+POST http://localhost:8000/classes
+Content-Type: application/json
+
+{
+  "da": "6304455",
+  "password": "ryad2007"
+}

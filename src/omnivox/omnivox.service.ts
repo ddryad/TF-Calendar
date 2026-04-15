@@ -9,7 +9,7 @@ import axios from 'axios';
 export class OmnivoxService {
 
 
-    private readonly omnivoxApiUrl = 'http://localhost:8000';
+    private readonly omnivoxApiUrl = 'http://127.0.0.1:8000';
 
     constructor(private httpService: HttpService) {}
 
@@ -17,7 +17,7 @@ export class OmnivoxService {
         try {
             const response = await firstValueFrom(
                 this.httpService.post(`${this.omnivoxApiUrl}/classes`, {
-                    da: da,
+                    da: String(da),
                     password: password,
                 })
             );
