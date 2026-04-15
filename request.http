@@ -29,7 +29,7 @@ GET http://localhost:3000/users/whoami
 POST http://localhost:3000/users/signout
 
 ### GET ONE User BY ID
-GET http://localhost:3000/users/4
+GET http://localhost:3000/users/1
 
 GET http://localhost:3000/users
 
