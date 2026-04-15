@@ -5,11 +5,11 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "user7@xyz.com",
+    "email": "haroun2e@xyz.com",
     "password": "abc123",
     "nomComplet": "Haroune Belhachani",
-    "omnivoxDA": "0981234",
-    "omnivoxPasswordHash": "somehash",
+    "omnivoxDA": "6304455",
+    "omnivoxPassword": "ryad2007",
     "calendrierId": 1
 }
 
@@ -18,7 +18,7 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "haroune@xyz.com",
+    "email": "haroun2e@xyz.com",
     "password": "abc123"
 }
 
