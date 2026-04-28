@@ -12,6 +12,7 @@ export class InvitationService {
     constructor(
     @InjectRepository(Invitation)
     private invitationRepository: Repository<Invitation>,
+    private invitationFactory: InvitationFactory
     ){}
 
     async findAll(){
@@ -39,8 +40,8 @@ export class InvitationService {
       }
 
     async createInvitation(invitationDto: CreateInvitationDto){
-        const factory = new InvitationFactory();
-        const specificFactory = factory.create(invitationDto.type);
+        
+        const specificFactory = this.invitationFactory.create(invitationDto.type);
     
         const baseData = specificFactory.create(invitationDto);
     

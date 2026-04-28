@@ -1,3 +1,6 @@
+import { CreateInvitationDto } from "../dtos/create-invitation.dto";
+import { Invitation } from "../invitation.entity"
+
 export interface IInvitationFactory{
-    create(type: string)
+    create(data: CreateInvitationDto): Partial<Invitation>;
 }
