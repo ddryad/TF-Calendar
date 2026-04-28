@@ -1,8 +1,9 @@
-import { CourDto } from './cour.dto';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
-import axios from 'axios';
+import { ProgrammableService } from 'src/programmable/programmable.service';
+import { CourDto } from './dtos/cour.dto';
+import { Activite, NiveauPriorite } from 'src/programmable/entities/activite.entity';
 
 
 @Injectable()
@@ -11,7 +12,7 @@ export class OmnivoxService {
 
     private readonly omnivoxApiUrl = 'http://127.0.0.1:8000';
 
-    constructor(private httpService: HttpService) {}
+    constructor(private httpService: HttpService, private programmableService : ProgrammableService) {}
 
     async getCours(da : number, password : string): Promise<CourDto[]>{
         try {
@@ -35,6 +36,40 @@ export class OmnivoxService {
                 status
             );
         }
+    }
+
+    async importCours(da: number, password: string, userId: number, calendrierId?: number | null){
+
+        const cours = await this.getCours(da, password);
+
+        const results: Activite[] = [];
+        const errors: { cours: string; dateDepart: Date; error: string }[] = [];
+
+        for(const cour of cours){
+            try {
+                const activite = await this.programmableService.createActivite(
+                    {
+                        nom : cour.nom,
+                        description: cour.description,
+                        dateDepart: new Date(cour.dateDepart),
+                        dureeHeures: cour.dureeHeures,
+                        priorite: NiveauPriorite.IMPORTANCE_MOYENNE,
+                    },
+                    userId,
+                    calendrierId ?? null,
+                );
+                results.push(activite);
+            }
+            catch(err: any){
+                errors.push({ cours: cour.nom, dateDepart: cour.dateDepart, error: err.message });
+            }
+        }
+
+        return {
+            activites: results,
+            erreurs: errors,
+        };
+
     }
 
 }

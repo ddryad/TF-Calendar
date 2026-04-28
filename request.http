@@ -60,3 +60,7 @@ Content-Type: application/json
   "da": "6304455",
   "password": "ryad2007"
 }
+
+
+### import cours
+POST http://localhost:3000/Omnivox/import
