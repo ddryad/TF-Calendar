@@ -20,5 +20,6 @@ import { User } from '../users/user.entity';
   ],
   controllers: [ProgrammableController],
   providers: [ProgrammableService],
+  exports:[ProgrammableService]
 })
 export class ProgrammableModule {}
