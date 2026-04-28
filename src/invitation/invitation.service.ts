@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Invitation } from './invitation.entity';
@@ -54,24 +54,25 @@ export class InvitationService {
         return this.invitationRepository.save(invitation);
     }
 
-    async acceptInvitation(id: number){
+    async acceptInvitation(id: number, userId: number){
         const invitation  = await this.findOne(id)
 
-        if(!invitation){
-            throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
+        if (invitation.invitedUserId !== userId){
+            throw new ForbiddenException("Vous ne pouvez pas accepter cette invitation");
         }
+
         invitation.statut = InvitationStatut.ACCEPTED;
         return this.invitationRepository.save(invitation);
     }
 
-    async refuseInvitation(id: number){
+    async refuseInvitation(id: number, userId: number){
         const invitation  = await this.findOne(id)
 
-        if(!invitation){
-            throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
+        if (invitation.invitedUserId !== userId){
+            throw new ForbiddenException("Vous ne pouvez pas accepter cette invitation");
         }
-        invitation.statut = InvitationStatut.REFUSED;
 
+        invitation.statut = InvitationStatut.REFUSED;
         return this.invitationRepository.save(invitation);
     }
 
