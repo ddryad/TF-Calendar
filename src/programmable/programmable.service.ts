@@ -8,6 +8,7 @@ import { ActiviteGroupe } from './entities/activite-groupe.entity';
 import { CreateEvenementDto } from './dtos/create-evenement.dto';
 import { CreateActiviteDto } from './dtos/create-activite.dto';
 import { CreateActiviteGroupeDto } from './dtos/create-activite-groupe.dto';
+import { ConflitInfo } from './dtos/conflit-info.dto';
 
 @Injectable()
 export class ProgrammableService {
@@ -115,5 +116,50 @@ export class ProgrammableService {
         );
       }
     }
+  }
+
+  // on detecte les conflits d'horaire pour un utilisateur et retourne une liste de dto pour afficher quels activites rentre en conflit avec temps de debut et fin
+  async getConflits(userId: number): Promise<ConflitInfo[]> {
+    const activites = await this.activiteRepo.find({ where: { userId } });
+    const conflits: ConflitInfo[] = [];
+
+    for (let i = 0; i < activites.length; i++) {
+
+      for (let j = i + 1; j < activites.length; j++) {
+
+        const a = activites[i];
+        const b = activites[j];
+
+        const debutA = new Date(a.dateDepart).getTime();
+        const finA = debutA + a.dureeHeures * 3_600_000;
+
+        const debutB = new Date(b.dateDepart).getTime();
+        const finB = debutB + b.dureeHeures * 3_600_000;
+
+        if (debutA < finB && finA > debutB) {
+          const debutChevauchement = Math.max(debutA, debutB);
+          const finChevauchement = Math.min(finA, finB);
+          const chevauchementMinutes = (finChevauchement - debutChevauchement) / 60_000;
+
+          const conflit = new ConflitInfo();
+
+          conflit.activiteIdA = a.id;
+          conflit.nomA = a.nom;
+          conflit.debutA = new Date(debutA);
+          conflit.finA = new Date(finA);
+
+          conflit.activiteIdB = b.id;
+          conflit.nomB = b.nom;
+          conflit.debutB = new Date(debutB);
+          conflit.finB = new Date(finB);
+
+          conflit.chevauchementMinutes = chevauchementMinutes;
+
+          conflits.push(conflit);
+        }
+      }
+    }
+
+    return conflits;
   }
 }
