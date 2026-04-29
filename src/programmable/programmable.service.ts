@@ -216,5 +216,42 @@ export class ProgrammableService {
 
     return creneaux;
   }
-}
+  // Si conflit detecte alors retourne l'activite mise a jour et des suggestions de creneaux libres
+  async replanifierActivite(
+    id: number,
+    nouvelleDateDepart: Date,
+    userId: number,
+  ): Promise<{ activite: Activite; conflitDetecte: boolean; suggestions: CreneauDisponible[] }> {
+    const activite = await this.activiteRepo.findOne({ where: { id, userId } });
 
+    if (!activite) {
+      throw new NotFoundException(`Activite avec id ${id} non trouvee`);
+    }
+
+    // verifier s'il y a un conflit a la nouvelle date
+    let conflitDetecte = false;
+    try {
+      await this.checkChevauchement(userId, nouvelleDateDepart, activite.dureeHeures, id);
+    } catch (e) {
+      conflitDetecte = true;
+    }
+
+    // si conflit on cherche des creneaux libres dans les 7 jours suivants
+    let suggestions: CreneauDisponible[] = [];
+    if (conflitDetecte) {
+      const dateDebut = new Date(nouvelleDateDepart);
+      const dateFin = new Date(dateDebut.getTime() + 7 * 24 * 3_600_000);
+      suggestions = await this.trouverCreneauxDisponibles(
+        userId, dateDebut, dateFin, activite.dureeHeures,
+      );
+    }
+
+    // si pas de conflit on met a jour la date
+    if (!conflitDetecte) {
+      activite.dateDepart = nouvelleDateDepart;
+      await this.activiteRepo.save(activite);
+    }
+
+    return { activite, conflitDetecte, suggestions };
+  }
+}
