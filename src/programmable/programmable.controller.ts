@@ -86,4 +86,22 @@ export class ProgrammableController {
   deleteProgrammable(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
     return this.programmableService.deleteProgrammable(id, user.id);
   }
+
+  @Post('activite-groupe/:id/participants/:participantId')
+  ajouterParticipant(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('participantId', ParseIntPipe) participantId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.programmableService.ajouterParticipant(id, participantId, user.id);
+  }
+
+  @Delete('activite-groupe/:id/participants/:participantId')
+  retirerParticipant(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('participantId', ParseIntPipe) participantId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.programmableService.retirerParticipant(id, participantId, user.id);
+  }
 }

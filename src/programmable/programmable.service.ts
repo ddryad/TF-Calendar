@@ -115,6 +115,45 @@ export class ProgrammableService {
     return this.programmableRepo.remove(programmable);
   }
 
+  private async trouverActiviteGroupeAvecParticipants(id: number, userId: number): Promise<ActiviteGroupe> {
+    const activiteGroupe = await this.activiteGroupeRepo.findOne({
+      where: { id, userId },
+      // on doit specfier la relation car le paramètre eager est à false dans l'entite activiteGroupe
+      relations: ['participants'],
+    });
+    if (!activiteGroupe) {
+      throw new NotFoundException(`ActiviteGroupe avec id ${id} non trouvee`);
+    }
+    return activiteGroupe;
+  }
+
+  async ajouterParticipant(activiteGroupeId: number, participantId: number, userId: number): Promise<ActiviteGroupe> {
+    const activiteGroupe = await this.trouverActiviteGroupeAvecParticipants(activiteGroupeId, userId);
+
+    const dejaPresent = activiteGroupe.participants.some(p => p.id === participantId);
+    if (dejaPresent) {
+      throw new ConflictException('Ce participant est deja dans cette activite de groupe');
+    }
+
+    const participant = await this.usersService.findOneUser(participantId);
+    await this.checkChevauchement(participant.id, activiteGroupe.dateDepart, activiteGroupe.dureeHeures);
+
+    activiteGroupe.participants.push(participant);
+    return this.activiteGroupeRepo.save(activiteGroupe);
+  }
+
+  async retirerParticipant(activiteGroupeId: number, participantId: number, userId: number): Promise<ActiviteGroupe> {
+    const activiteGroupe = await this.trouverActiviteGroupeAvecParticipants(activiteGroupeId, userId);
+
+    const index = activiteGroupe.participants.findIndex(p => p.id === participantId);
+    if (index === -1) {
+      throw new NotFoundException('Ce participant ne fait pas partie de cette activite de groupe');
+    }
+
+    activiteGroupe.participants.splice(index, 1);
+    return this.activiteGroupeRepo.save(activiteGroupe);
+  }
+
   private async checkChevauchement(
     userId: number,
     dateDepart: Date,
