@@ -9,6 +9,7 @@ import { CreateEvenementDto } from './dtos/create-evenement.dto';
 import { CreateActiviteDto } from './dtos/create-activite.dto';
 import { CreateActiviteGroupeDto } from './dtos/create-activite-groupe.dto';
 import { ConflitInfo } from './dtos/conflit-info.dto';
+import { CreneauDisponible } from './dtos/creneau-disponible.dto';
 
 @Injectable()
 export class ProgrammableService {
@@ -162,4 +163,58 @@ export class ProgrammableService {
 
     return conflits;
   }
+
+  async trouverCreneauxDisponibles(
+    userId: number,
+    dateDebut: Date,
+    dateFin: Date,
+    dureeHeures: number,
+    maxResultats: number = 5,
+  ): Promise<CreneauDisponible[]> {
+    const activites = await this.activiteRepo.find({ where: { userId } });
+
+    // transformer la liste d'activites en plages d'occupation {debut,fin},
+    const plagesOccupees = activites
+      .map(a => ({
+        debut: new Date(a.dateDepart).getTime(),
+        fin: new Date(a.dateDepart).getTime() + a.dureeHeures * 3_600_000,
+      }))
+      //on les fitre par rapport a la date de debut et de fin de la requete et on ignore les activites qui sont en dehors de cet intervalle
+      .filter(p => p.fin > new Date(dateDebut).getTime() && p.debut < new Date(dateFin).getTime())
+      //on les trie par date de debut
+      .sort((a, b) => a.debut - b.debut);
+
+    const creneaux: CreneauDisponible[] = [];
+    const dureeMilis = dureeHeures * 3_600_000;
+    let curseur = new Date(dateDebut).getTime();
+    const limiteMax = new Date(dateFin).getTime();
+
+    for (const plage of plagesOccupees) {
+      if (creneaux.length >= maxResultats) break;
+
+      // verifier si le trou avant cette plage est assez grand
+      if (plage.debut - curseur >= dureeMilis) {
+        const creneau = new CreneauDisponible();
+        creneau.debut = new Date(curseur);
+        creneau.fin = new Date(curseur + dureeMilis);
+        creneau.dureeHeures = dureeHeures;
+        creneaux.push(creneau);
+      }
+
+      // avancer le curseur apres la fin de cette plage occupee
+      curseur = Math.max(curseur, plage.fin);
+    }
+
+    // verifier le trou apres la derniere plage occupee
+    if (creneaux.length < maxResultats && limiteMax - curseur >= dureeMilis) {
+      const creneau = new CreneauDisponible();
+      creneau.debut = new Date(curseur);
+      creneau.fin = new Date(curseur + dureeMilis);
+      creneau.dureeHeures = dureeHeures;
+      creneaux.push(creneau);
+    }
+
+    return creneaux;
+  }
 }
+
