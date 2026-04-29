@@ -1,0 +1,143 @@
+### =====================================================
+###   NOUVELLES ROUTES — CONFLITS, RESCHEDULE, GROUPES
+###   Ordre d'exécution recommandé : de haut en bas
+### =====================================================
+
+
+### ---- 0. SETUP : LOGIN ----
+
+### 1. Se connecter (obligatoire — cookie session requis)
+POST http://localhost:3000/auth/signin
+content-type: application/json
+
+{
+    "email": "haroune@xyz.com",
+    "password": "abc123"
+}
+
+
+### ---- 1. SETUP : CRÉER DES ACTIVITÉS QUI SE CHEVAUCHENT ----
+
+### 2. Créer activité A (14h00 → 17h00)
+POST http://localhost:3000/programmable/activite
+content-type: application/json
+
+{
+    "nom": "Activite A",
+    "description": "Première activité",
+    "dateDepart": "2026-06-01T14:00:00Z",
+    "dureeHeures": 3,
+    "priorite": "URGENT"
+}
+
+###
+
+### 3. Créer activité B (16h00 → 19h00) — chevauche A de 1h
+POST http://localhost:3000/programmable/activite
+content-type: application/json
+
+{
+    "nom": "Activite B",
+    "description": "Deuxième activité (chevauche A)",
+    "dateDepart": "2026-06-01T16:00:00Z",
+    "dureeHeures": 3,
+    "priorite": "IMPORTANCE_MOYENNE"
+}
+
+
+### ---- 2. TESTER getConflits ----
+
+### 4. Obtenir tous les conflits du user connecté (doit retourner A vs B)
+GET http://localhost:3000/programmable/conflits
+
+
+### ---- 3. TESTER trouverCreneauxDisponibles ----
+
+### 5. Chercher des créneaux libres de 2h dans la journée du 1er juin
+GET http://localhost:3000/programmable/creneaux-disponibles?dateDebut=2026-06-01T08:00:00Z&dateFin=2026-06-01T23:00:00Z&dureeHeures=2
+
+
+### ---- 4. TESTER replanifierActivite (sans conflit) ----
+
+### 6. Replanifier activité A vers 08h00 (pas de conflit → doit réussir)
+###    Changer l'id selon la reponse de l'etape 2
+PATCH http://localhost:3000/programmable/activite/1/replanifier
+content-type: application/json
+
+{
+    "nouvelleDateDepart": "2026-06-01T08:00:00Z"
+}
+
+
+### ---- 5. TESTER replanifierActivite (avec conflit) ----
+
+### 7. Replanifier activité B vers une heure qui chevauche A déplacée (doit retourner conflit + suggestions)
+###    Changer l'id selon la reponse de l'etape 3
+PATCH http://localhost:3000/programmable/activite/2/replanifier
+content-type: application/json
+
+{
+    "nouvelleDateDepart": "2026-06-01T09:00:00Z"
+}
+
+
+### ---- 6. SETUP : CRÉER UN SECOND USER POUR LES GROUPES ----
+
+### 8. Créer un second utilisateur
+POST http://localhost:3000/auth/signup
+content-type: application/json
+
+{
+    "email": "participant@xyz.com",
+    "password": "abc123",
+    "nomComplet": "Participant Test"
+}
+
+
+### ---- 7. TESTER ActiviteGroupe avec participants ----
+
+### 9. Créer une activité de groupe (participantIds = [id du user 2])
+###    Doit charger le User entity, vérifier conflits pour chaque participant
+POST http://localhost:3000/programmable/activite-groupe
+content-type: application/json
+
+{
+    "nom": "Reunion equipe",
+    "description": "Travail de session",
+    "dateDepart": "2026-06-02T10:00:00Z",
+    "dureeHeures": 2,
+    "priorite": "IMPORTANCE_MOYENNE",
+    "groupeId": 1,
+    "participantIds": [2]
+}
+
+
+### ---- 8. TESTER ajouterParticipant ----
+
+### 10. Ajouter un participant à l'activité de groupe existante
+###     Changer les ids selon les reponses des etapes 9 et 8
+POST http://localhost:3000/programmable/activite-groupe/3/participants/2
+
+
+### ---- 9. TESTER retirerParticipant ----
+
+### 11. Retirer un participant de l'activité de groupe
+DELETE http://localhost:3000/programmable/activite-groupe/3/participants/2
+
+
+### ---- 10. TESTER CAS D'ERREUR ----
+
+### 12. Ajouter un participant qui n'existe pas (doit retourner 404)
+POST http://localhost:3000/programmable/activite-groupe/3/participants/99999
+
+### 13. Retirer un participant absent (doit retourner 404)
+DELETE http://localhost:3000/programmable/activite-groupe/3/participants/99999
+
+### 14. Ajouter un participant deux fois (doit retourner 409 Conflict)
+### Exécuter deux fois la requête 10
+
+### 15. Tester sans session (doit retourner 403)
+POST http://localhost:3000/users/signout
+
+###
+GET http://localhost:3000/programmable/conflits

@@ -6,7 +6,7 @@ import { Programmable } from './entities/programmable.entity';
 import { Evenement } from './entities/evenement.entity';
 import { Activite } from './entities/activite.entity';
 import { ActiviteGroupe } from './entities/activite-groupe.entity';
-import { User } from '../users/user.entity';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
@@ -15,11 +15,12 @@ import { User } from '../users/user.entity';
       Evenement,
       Activite,
       ActiviteGroupe,
-      User,
     ]),
+    UsersModule,
   ],
   controllers: [ProgrammableController],
   providers: [ProgrammableService],
   exports:[ProgrammableService]
 })
 export class ProgrammableModule {}
+

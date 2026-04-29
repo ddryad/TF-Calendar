@@ -1,10 +1,12 @@
 // on remarque ici que j'utilise des dtos + currentuser sur certaines routes
 // pour empêcher d'usurper l'identite d'un utilisateur
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ProgrammableService } from './programmable.service';
 import { CreateEvenementDto } from './dtos/create-evenement.dto';
 import { CreateActiviteDto } from './dtos/create-activite.dto';
 import { CreateActiviteGroupeDto } from './dtos/create-activite-groupe.dto';
+import { ReplanifierDto } from './dtos/replanifier.dto';
+import { RechercheCreneauxDto } from './dtos/recherche-creneaux.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { CurrentUser } from 'src/users/decorators/current-user.decorator';
 import { User } from 'src/users/user.entity';
@@ -17,6 +19,18 @@ export class ProgrammableController {
   @Get()
   findAll() {
     return this.programmableService.findAll();
+  }
+
+  @Get('conflits')
+  getConflits(@CurrentUser() user: User) {
+    return this.programmableService.getConflits(user.id);
+  }
+
+  @Get('creneaux-disponibles')
+  getCreneauxDisponibles(@CurrentUser() user: User, @Query() query: RechercheCreneauxDto) {
+    return this.programmableService.trouverCreneauxDisponibles(
+      user.id, query.dateDebut, query.dateFin, query.dureeHeures,
+    );
   }
 
   @Get('user/:userId')
@@ -54,6 +68,15 @@ export class ProgrammableController {
     return this.programmableService.updateActivite(id, activite, user.id);
   }
 
+  @Patch('activite/:id/replanifier')
+  replanifierActivite(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: User,
+    @Body() dto: ReplanifierDto,
+  ) {
+    return this.programmableService.replanifierActivite(id, dto.nouvelleDateDepart, user.id);
+  }
+
   @Patch('evenement/:id')
   updateEvenement(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User, @Body() evenement: CreateEvenementDto) {
     return this.programmableService.updateEvenement(id, evenement, user.id);
@@ -62,5 +85,23 @@ export class ProgrammableController {
   @Delete(':id')
   deleteProgrammable(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
     return this.programmableService.deleteProgrammable(id, user.id);
+  }
+
+  @Post('activite-groupe/:id/participants/:participantId')
+  ajouterParticipant(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('participantId', ParseIntPipe) participantId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.programmableService.ajouterParticipant(id, participantId, user.id);
+  }
+
+  @Delete('activite-groupe/:id/participants/:participantId')
+  retirerParticipant(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('participantId', ParseIntPipe) participantId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.programmableService.retirerParticipant(id, participantId, user.id);
   }
 }
