@@ -20,6 +20,7 @@ import { UsersModule } from '../users/users.module';
   ],
   controllers: [ProgrammableController],
   providers: [ProgrammableService],
+  exports:[ProgrammableService]
 })
 export class ProgrammableModule {}
 

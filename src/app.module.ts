@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProgrammableModule } from './programmable/programmable.module';
 import { InvitationModule } from './invitation/invitation.module';
 import { CalendrierModule } from './calendrier/calendrier.module';
+import { OmnivoxModule } from './omnivox/omnivox.module';
 
 @Module({
   imports:
@@ -21,7 +22,8 @@ import { CalendrierModule } from './calendrier/calendrier.module';
       ProgrammableModule,
       InvitationModule,
       AuthModule,
-      CalendrierModule
+      CalendrierModule,
+      OmnivoxModule
     ],
   controllers: [AppController],
   providers: [AppService],

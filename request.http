@@ -5,12 +5,12 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "haroune@xyz.com",
+    "email": "haroun2e@xyz.com",
     "password": "abc123",
     "nomComplet": "Haroune Belhachani",
-    "omnivoxDA": "0981234",
-    "omnivoxPassword": "omnivoxPassword",
-    "calendrierId": 2
+    "omnivoxDA": "6304455",
+    "omnivoxPassword": "ryad2007",
+    "calendrierId": 1
 }
 
 ### Login 
@@ -18,7 +18,7 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "haroune@xyz.com",
+    "email": "haroun2e@xyz.com",
     "password": "abc123"
 }
 
@@ -29,7 +29,7 @@ GET http://localhost:3000/users/whoami
 POST http://localhost:3000/users/signout
 
 ### GET ONE User BY ID
-GET http://localhost:3000/users/26
+GET http://localhost:3000/users/1
 
 GET http://localhost:3000/users
 
@@ -42,9 +42,25 @@ content-type: application/json
     "nomComplet": "Updated Name"
 }
 
-<<<<<<< HEAD
 ###trouver tous les users
 GET  http://localhost:3005/users/getAll
 =======
 ### Delete User par ID
-DELETE http://localhost:3000/users/1
+DELETE http://localhost:3000/users/27
+
+### get cours
+GET http://localhost:3000/Omnivox/cours
+
+
+### get cours straight from api
+POST http://localhost:8000/classes
+Content-Type: application/json
+
+{
+  "da": "6304455",
+  "password": "ryad2007"
+}
+
+
+### import cours
+POST http://localhost:3000/Omnivox/import

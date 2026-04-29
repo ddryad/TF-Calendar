@@ -14,7 +14,7 @@ export class UserDTO{
     nomComplet: string
 
     @Expose()
-    omnivoxDA: string
+    omnivoxDA: number
 
     @Expose()
     calendrierId: number
