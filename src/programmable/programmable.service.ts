@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Programmable } from './entities/programmable.entity';
@@ -11,6 +11,7 @@ import { CreateActiviteGroupeDto } from './dtos/create-activite-groupe.dto';
 import { ConflitInfo } from './dtos/conflit-info.dto';
 import { CreneauDisponible } from './dtos/creneau-disponible.dto';
 import { UsersService } from '../users/users.service';
+import { InvitationService } from '../invitation/invitation.service';
 
 @Injectable()
 export class ProgrammableService {
@@ -24,6 +25,8 @@ export class ProgrammableService {
     @InjectRepository(ActiviteGroupe)
     private readonly activiteGroupeRepo: Repository<ActiviteGroupe>,
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => InvitationService))
+    private readonly invitationService: InvitationService,
   ) { }
 
   async findAll(): Promise<Programmable[]> {
@@ -54,7 +57,6 @@ export class ProgrammableService {
     return this.activiteRepo.save(activite);
   }
 
-  // on charge les User entities a partir des participantIds et on verifie les conflits pour chaque participant
   async createActiviteGroupe(createDto: CreateActiviteGroupeDto, userId: number, calendrierId?: number | null): Promise<ActiviteGroupe> {
     await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
 
@@ -64,19 +66,29 @@ export class ProgrammableService {
       throw new NotFoundException('Un ou plusieurs participants sont introuvables');
     }
 
-    // verifier les conflits d'horaire pour chaque participant
-    for (const participant of participants) {
-      await this.checkChevauchement(participant.id, createDto.dateDepart, createDto.dureeHeures);
-    }
-
     const { participantIds, groupeId, ...donnees } = createDto;
+    
+    // On cree l'activite avec un tableau de participants vide (le createur n'est pas "participant" mais "owner")
     const activiteGroupe = this.activiteGroupeRepo.create({
       ...donnees,
       userId,
       calendrierId: calendrierId ?? null,
-      participants,
+      participants: [],
     });
-    return this.activiteGroupeRepo.save(activiteGroupe);
+    
+    const savedActiviteGroupe = await this.activiteGroupeRepo.save(activiteGroupe);
+
+    // On genere des invitations pour chaque participant
+    for (const participant of participants) {
+      await this.invitationService.createInvitation({
+        senderId: userId,
+        invitedUserId: participant.id,
+        type: 'ACTIVITE',
+        activiteGroupeId: savedActiviteGroupe.id,
+      });
+    }
+
+    return savedActiviteGroupe;
   }
 
   async updateEvenement(id: number, attrs: Partial<CreateEvenementDto>, userId: number): Promise<Evenement> {
