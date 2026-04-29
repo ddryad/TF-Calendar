@@ -10,6 +10,7 @@ import { CreateActiviteDto } from './dtos/create-activite.dto';
 import { CreateActiviteGroupeDto } from './dtos/create-activite-groupe.dto';
 import { ConflitInfo } from './dtos/conflit-info.dto';
 import { CreneauDisponible } from './dtos/creneau-disponible.dto';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ProgrammableService {
@@ -22,6 +23,7 @@ export class ProgrammableService {
     private readonly activiteRepo: Repository<Activite>,
     @InjectRepository(ActiviteGroupe)
     private readonly activiteGroupeRepo: Repository<ActiviteGroupe>,
+    private readonly usersService: UsersService,
   ) { }
 
   async findAll(): Promise<Programmable[]> {
@@ -52,9 +54,28 @@ export class ProgrammableService {
     return this.activiteRepo.save(activite);
   }
 
+  // on charge les User entities a partir des participantIds et on verifie les conflits pour chaque participant
   async createActiviteGroupe(createDto: CreateActiviteGroupeDto, userId: number, calendrierId?: number | null): Promise<ActiviteGroupe> {
     await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
-    const activiteGroupe = this.activiteGroupeRepo.create({ ...createDto, userId, calendrierId: calendrierId ?? null });
+
+    const participants = await this.usersService.findByIds(createDto.participantIds);
+
+    if (participants.length !== createDto.participantIds.length) {
+      throw new NotFoundException('Un ou plusieurs participants sont introuvables');
+    }
+
+    // verifier les conflits d'horaire pour chaque participant
+    for (const participant of participants) {
+      await this.checkChevauchement(participant.id, createDto.dateDepart, createDto.dureeHeures);
+    }
+
+    const { participantIds, groupeId, ...donnees } = createDto;
+    const activiteGroupe = this.activiteGroupeRepo.create({
+      ...donnees,
+      userId,
+      calendrierId: calendrierId ?? null,
+      participants,
+    });
     return this.activiteGroupeRepo.save(activiteGroupe);
   }
 
