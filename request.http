@@ -26,7 +26,7 @@ content-type: application/json
 GET http://localhost:3000/users/whoami
 
 ### Logout
-POST http://localhost:3000/users/signout
+POST http://localhost:3000/auth/signout
 
 ### GET ONE User BY ID
 GET http://localhost:3000/users/1

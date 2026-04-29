@@ -8,10 +8,13 @@ import { ProgrammableModule } from './programmable/programmable.module';
 import { InvitationModule } from './invitation/invitation.module';
 import { CalendrierModule } from './calendrier/calendrier.module';
 import { OmnivoxModule } from './omnivox/omnivox.module';
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
   imports:
     [
+      ConfigModule.forRoot({isGlobal: true}), //env accessible everywhere
       UsersModule,
       TypeOrmModule.forRoot({
         type: 'sqlite',

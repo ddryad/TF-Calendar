@@ -12,11 +12,6 @@ export class UsersController {
 
     constructor(private service: UsersService) { }
 
-    @UseGuards(AuthGuard)
-    @Post("/signout")
-    async signout(@Session() session: any) {
-        session.userId = null
-    }
 
     @Serialize(UserDTO)
     @Get("/whoami")

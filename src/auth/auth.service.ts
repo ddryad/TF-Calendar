@@ -3,29 +3,30 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { CreateUserDTO } from 'src/users/dtos/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { promisify } from 'util';
+import { CookieStrategy } from './strategies/cookie.strategy';
 
 const scrypt = promisify(_scrypt)
 
 @Injectable()
 export class AuthService {
 
-    constructor(private UsersService : UsersService) {} 
+    constructor(private UsersService : UsersService, private CookieStrategy : CookieStrategy) {} 
 
     async signin(email : string, password : string) {
-        const user = await this.UsersService.findByEmail(email)
+        // const user = await this.UsersService.findByEmail(email)
 
-        if (!user){
-            throw new BadRequestException("user doesnt exist")
-        }
+        // if (!user){
+        //     throw new BadRequestException("user doesnt exist")
+        // }
 
-        const [salt, storedHash] = user.passwordHash.split('.')
+        // const [salt, storedHash] = user.passwordHash.split('.')
 
-        const hash = (await scrypt(password, salt, 32)) as Buffer
+        // const hash = (await scrypt(password, salt, 32)) as Buffer
 
-        if (hash.toString('hex') != storedHash){
-            throw new BadRequestException('wrong password')
-        }
-        return user
+        // if (hash.toString('hex') != storedHash){
+        //     throw new BadRequestException('wrong password')
+        // }
+        return this.CookieStrategy.validate(email, password);
 
     }
 
