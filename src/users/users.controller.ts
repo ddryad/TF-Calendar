@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Patch, Param, Get, Session, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, Patch, Param, Get, Session, UseGuards, Req } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
@@ -12,10 +12,9 @@ export class UsersController {
 
     constructor(private service: UsersService) { }
 
-    @UseGuards(AuthGuard)
     @Post("/signout")
-    async signout(@Session() session: any) {
-        session.userId = null
+    async signout(@Session() session: any, @Req() req: any) {
+        req.session = null;
     }
 
     @Serialize(UserDTO)
