@@ -4,6 +4,11 @@ import { AuthService } from './auth.service';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDTO } from 'src/users/dtos/user.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard as MyAuthGUard } from 'src/guards/auth.guard';;
+import { CurrentUser } from 'src/users/decorators/current-user.decorator'; 
+import { User } from 'src/users/user.entity';
+
+
 
 
 @Controller('auth')
@@ -27,13 +32,20 @@ export class AuthController {
         return user;
     }
 
-    @UseGuards(AuthGuard)
+    @UseGuards(MyAuthGUard)
     @Post('/signout')
     signout(@Session() session: any) {
         session.userId = null;
     }
 
 
+
+    @UseGuards(MyAuthGUard)
+    @Serialize(UserDTO)
+    @Get("/whoami")
+    async whoAmI(@CurrentUser() user: User) {
+        return user;
+    }
 
 
 
@@ -47,8 +59,8 @@ export class AuthController {
     async googleCallback(@Req() req: any, @Session() session: any, @Res() res: any) {
         session.userId = req.user.id;
         // Redirect au frontend apres login
-        // res.redirect('http://localhost:5173');
-        return { id: req.user.id, email: req.user.email, nomComplet: req.user.nomComplet };
+        res.redirect('http://localhost:5173');
+        // return { id: req.user.id, email: req.user.email, nomComplet: req.user.nomComplet };
     }    
 
 
