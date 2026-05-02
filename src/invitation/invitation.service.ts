@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Invitation } from './invitation.entity';
@@ -7,11 +7,15 @@ import { UpdateInvitationDto } from './dtos/update-invitation.dto';
 import { InvitationStatut } from './enums/invitation-statut.enum';
 import { InvitationFactory } from "./factory/invitation.factory";
 
+import { ProgrammableService } from '../programmable/programmable.service';
+
 @Injectable()
 export class InvitationService {
     constructor(
     @InjectRepository(Invitation)
     private invitationRepository: Repository<Invitation>,
+    @Inject(forwardRef(() => ProgrammableService))
+    private readonly programmableService: ProgrammableService,
     ){}
 
     async findAll(){
@@ -59,6 +63,16 @@ export class InvitationService {
         if(!invitation){
             throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
         }
+        
+        if (invitation.type === 'ACTIVITE' && invitation.activiteGroupeId) {
+            // L'ajout s'assure des conflits avant de push dans participants
+            await this.programmableService.ajouterParticipant(
+                invitation.activiteGroupeId, 
+                invitation.invitedUserId, 
+                invitation.senderId
+            );
+        }
+
         invitation.statut = InvitationStatut.ACCEPTED;
         return this.invitationRepository.save(invitation);
     }
