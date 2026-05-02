@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProgrammableController } from './programmable.controller';
 import { ProgrammableService } from './programmable.service';
@@ -6,7 +6,8 @@ import { Programmable } from './entities/programmable.entity';
 import { Evenement } from './entities/evenement.entity';
 import { Activite } from './entities/activite.entity';
 import { ActiviteGroupe } from './entities/activite-groupe.entity';
-import { User } from '../users/user.entity';
+import { UsersModule } from '../users/users.module';
+import { InvitationModule } from '../invitation/invitation.module';
 
 @Module({
   imports: [
@@ -15,11 +16,13 @@ import { User } from '../users/user.entity';
       Evenement,
       Activite,
       ActiviteGroupe,
-      User,
     ]),
+    UsersModule,
+    forwardRef(() => InvitationModule),
   ],
   controllers: [ProgrammableController],
   providers: [ProgrammableService],
   exports:[ProgrammableService]
 })
 export class ProgrammableModule {}
+
