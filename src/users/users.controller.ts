@@ -2,7 +2,6 @@ import { Controller, Body, Post, Patch, Param, Get, Session, UseGuards, Req } fr
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
-import { CurrentUser } from './decorators/current-user.decorator';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UserDTO } from './dtos/user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
@@ -12,16 +11,6 @@ export class UsersController {
 
     constructor(private service: UsersService) { }
 
-    @Post("/signout")
-    async signout(@Session() session: any, @Req() req: any) {
-        req.session = null;
-    }
-
-    @Serialize(UserDTO)
-    @Get("/whoami")
-    async whoAmI(@CurrentUser() user: User) {
-        return user;
-    }
 
     @Serialize(UserDTO)
     @Get("/:id")

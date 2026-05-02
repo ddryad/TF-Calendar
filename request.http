@@ -5,9 +5,9 @@ POST http://localhost:3000/auth/signup
 content-type: application/json
 
 {
-    "email": "haroun2e@xyz.com",
-    "password": "abc123",
-    "nomComplet": "Haroune Belhachani",
+    "email": "test2@gmail.com",
+    "password": "1234",
+    "nomComplet": "test",
     "omnivoxDA": "6304455",
     "omnivoxPassword": "ryad2007",
     "calendrierId": 1
@@ -18,15 +18,15 @@ POST http://localhost:3000/auth/signin
 content-type: application/json
 
 {
-    "email": "haroun2e@xyz.com",
-    "password": "abc123"
+    "email": "test2@gmail.com",
+    "password": "1234"
 }
 
 ### Who Am I (Requires valid cookie session)
-GET http://localhost:3000/users/whoami
+GET http://localhost:3000/auth/whoami
 
 ### Logout
-POST http://localhost:3000/users/signout
+POST http://localhost:3000/auth/signout
 
 ### GET ONE User BY ID
 GET http://localhost:3000/users/1
@@ -43,10 +43,11 @@ content-type: application/json
 }
 
 ###trouver tous les users
-GET  http://localhost:3005/users/getAll
+GET  http://localhost:3000/users/getAllUsers
+
 =======
 ### Delete User par ID
-DELETE http://localhost:3000/users/27
+DELETE http://localhost:3000/users/2
 
 ### get cours
 GET http://localhost:3000/Omnivox/cours

@@ -10,8 +10,9 @@ export class User {
     @Column()
     email: string
 
+    //password is nullable for Oauth users
     @Exclude()
-    @Column()
+    @Column({nullable: true})
     passwordHash: string
 
     @Column({ nullable: true })
