@@ -54,8 +54,4 @@ export class AuthService {
 
     }
 
-    async whoami(session : any){
-        return session.id == null ? "No one logged in" : this.UsersService.findOneUser(session.id)
-    }
-
 }

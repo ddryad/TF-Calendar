@@ -32,10 +32,9 @@ export class AuthController {
         return user;
     }
 
-    @UseGuards(MyAuthGUard)
     @Post('/signout')
-    signout(@Session() session: any) {
-        session.userId = null;
+    async signout(@Session() session: any, @Req() req: any) {
+        req.session = null;
     }
 
 
