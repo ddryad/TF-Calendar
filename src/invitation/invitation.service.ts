@@ -1,5 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
-import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, NotFoundException, Inject, forwardRef,ForbiddenException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Invitation } from './invitation.entity';
@@ -16,7 +15,7 @@ export class InvitationService {
     @InjectRepository(Invitation)
     private invitationRepository: Repository<Invitation>,
     private invitationFactory: InvitationFactory
-    @Inject(forwardRef(() => ProgrammableService))
+    ,@Inject(forwardRef(() => ProgrammableService))
     private readonly programmableService: ProgrammableService,
     ){}
 

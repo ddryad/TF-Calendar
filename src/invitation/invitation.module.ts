@@ -10,10 +10,7 @@ import { InvitationFactory } from './factory/invitation.factory';
     TypeOrmModule.forFeature([Invitation]),
     forwardRef(() => ProgrammableModule),
   ],
-  providers: [InvitationService],
-  controllers: [InvitationController],
-  exports: [InvitationService]
-  imports: [TypeOrmModule.forFeature([Invitation])],
+  exports: [InvitationService],
   providers: [InvitationService, InvitationFactory],
   controllers: [InvitationController]
 })

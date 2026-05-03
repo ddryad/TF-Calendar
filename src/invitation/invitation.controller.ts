@@ -27,12 +27,12 @@ export class InvitationController {
     return this.invitationService.findAll();
    }
 
-   @Get('received/:userId') //mes invitations reçu
+   @Get('received') //mes invitations reçu
    getMyInvitations(@CurrentUser() user: User) {
    return this.invitationService.getMyInvitations(user.id);
    }
 
-   @Get('sent/:userId') //mes invitations envoyées
+   @Get('sent') //mes invitations envoyées
    getSent(@CurrentUser() user: User) {
    return this.invitationService.getSentInvitations(user.id);
    }
