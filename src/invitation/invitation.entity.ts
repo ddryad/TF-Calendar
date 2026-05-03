@@ -20,6 +20,9 @@ export class Invitation {
     @Column() // permet de différencier le type de l'invitation soit InvitationAmi soit InvitationActivite
     type: string;
 
+    @Column({ nullable: true }) // Renseigné uniquement si type === 'ACTIVITE'
+    activiteGroupeId: number;
+
     @Column({nullable : true})
     activiteId?: number;
 
