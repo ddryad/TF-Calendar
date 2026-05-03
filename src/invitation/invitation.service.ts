@@ -24,7 +24,7 @@ export class InvitationService {
     }
 
     async findOne(id: number){
-        const invitation = await this.invitationRepository.findOne({where:{id}})
+        const invitation = await this.invitationRepository.findOne({where:{id}, relations: ["sender", "invitedUser"]})
         if(!invitation){
             throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
         }
@@ -33,13 +33,15 @@ export class InvitationService {
 
     async getMyInvitations(userId: number) {
         return this.invitationRepository.find({
-          where: { invitedUserId: userId }
+          where: { invitedUserId: userId },
+          relations: ["sender"],
         });
       }
 
       async getSentInvitations(userId: number) {
         return this.invitationRepository.find({
-          where: { senderId: userId }
+          where: { senderId: userId },
+          relations: ["invitedUser"],
         });
       }
 

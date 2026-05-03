@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import { User } from "src/users/user.entity";
 import { InvitationStatut } from "./enums/invitation-statut.enum";
 @Entity()
 export class Invitation {
@@ -10,6 +11,14 @@ export class Invitation {
 
     @Column()
     invitedUserId: number;
+
+    @ManyToOne(() => User)
+    @JoinColumn({name: "senderId"})
+    sender: User;
+
+    @ManyToOne(() => User)
+    @JoinColumn({name: "invitedUserId"})
+    invitedUser: User;
 
     @Column({ type: 'text', enum: InvitationStatut }) //TypeORM voit un Objet donc on précise le type dans @Column
     statut: InvitationStatut;
