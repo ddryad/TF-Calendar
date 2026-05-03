@@ -1,3 +1,4 @@
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Injectable, NotFoundException, Inject, forwardRef } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,6 +15,7 @@ export class InvitationService {
     constructor(
     @InjectRepository(Invitation)
     private invitationRepository: Repository<Invitation>,
+    private invitationFactory: InvitationFactory
     @Inject(forwardRef(() => ProgrammableService))
     private readonly programmableService: ProgrammableService,
     ){}
@@ -43,8 +45,8 @@ export class InvitationService {
       }
 
     async createInvitation(invitationDto: CreateInvitationDto){
-        const factory = new InvitationFactory();
-        const specificFactory = factory.create(invitationDto.type);
+        
+        const specificFactory = this.invitationFactory.create(invitationDto.type);
     
         const baseData = specificFactory.create(invitationDto);
     
@@ -57,11 +59,11 @@ export class InvitationService {
         return this.invitationRepository.save(invitation);
     }
 
-    async acceptInvitation(id: number){
+    async acceptInvitation(id: number, userId: number){
         const invitation  = await this.findOne(id)
 
-        if(!invitation){
-            throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
+        if (invitation.invitedUserId !== userId){
+            throw new ForbiddenException("Vous ne pouvez pas accepter cette invitation");
         }
         
         if (invitation.type === 'ACTIVITE' && invitation.activiteGroupeId) {
@@ -73,18 +75,19 @@ export class InvitationService {
             );
         }
 
+
         invitation.statut = InvitationStatut.ACCEPTED;
         return this.invitationRepository.save(invitation);
     }
 
-    async refuseInvitation(id: number){
+    async refuseInvitation(id: number, userId: number){
         const invitation  = await this.findOne(id)
 
-        if(!invitation){
-            throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
+        if (invitation.invitedUserId !== userId){
+            throw new ForbiddenException("Vous ne pouvez pas accepter cette invitation");
         }
-        invitation.statut = InvitationStatut.REFUSED;
 
+        invitation.statut = InvitationStatut.REFUSED;
         return this.invitationRepository.save(invitation);
     }
 

@@ -4,6 +4,8 @@ import { CreateInvitationDto } from './dtos/create-invitation.dto';
 import { UpdateInvitationDto } from './dtos/update-invitation.dto';
 import { Invitation } from './invitation.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { CurrentUser } from 'src/users/decorators/current-user.decorator';
+import { User } from 'src/users/user.entity';
 
 
 @UseGuards(AuthGuard)
@@ -26,13 +28,13 @@ export class InvitationController {
    }
 
    @Get('received/:userId') //mes invitations reçu
-   getMyInvitations(@Param('userId', ParseIntPipe) userId: number) {
-   return this.invitationService.getMyInvitations(userId);
+   getMyInvitations(@CurrentUser() user: User) {
+   return this.invitationService.getMyInvitations(user.id);
    }
 
    @Get('sent/:userId') //mes invitations envoyées
-   getSent(@Param('userId', ParseIntPipe) userId: number) {
-   return this.invitationService.getSentInvitations(userId);
+   getSent(@CurrentUser() user: User) {
+   return this.invitationService.getSentInvitations(user.id);
    }
    
    @Get(':id') // recupère une invitation par son id 
@@ -42,22 +44,22 @@ export class InvitationController {
 
 
    @Post() // crée une invitation 
-   create(@Body() invitation: CreateInvitationDto){
-    return this.invitationService.createInvitation(invitation);
+   create(@Body() invitationDto: CreateInvitationDto){
+    return this.invitationService.createInvitation(invitationDto);
    }
 
    @Patch(':id/accept') // accepte l'invitation
-   accept(@Param('id', ParseIntPipe) id: number ){
-    return this.invitationService.acceptInvitation(id);
+   accept(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User ){
+    return this.invitationService.acceptInvitation(id, user.id);
    }
  
    @Patch(':id/refuse') // refuse l'invitation 
-   refuse(@Param('id', ParseIntPipe) id: number){
-    return this.invitationService.refuseInvitation(id);
+   refuse(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User){
+    return this.invitationService.refuseInvitation(id, user.id);
    }
 
    @Delete(':id')
-    remove(@Param('id') id: number) {
+    remove(@Param('id', ParseIntPipe) id: number) {
     return this.invitationService.remove(id);
     }
 

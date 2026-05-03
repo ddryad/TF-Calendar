@@ -22,4 +22,10 @@ export class Invitation {
 
     @Column({ nullable: true }) // Renseigné uniquement si type === 'ACTIVITE'
     activiteGroupeId: number;
+
+    @Column({nullable : true})
+    activiteId?: number;
+
+    @Column({nullable : true})
+    amiId?: number;
 }
