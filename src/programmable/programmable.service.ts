@@ -52,7 +52,9 @@ export class ProgrammableService {
   }
 
   async createActivite(createDto: CreateActiviteDto, userId: number, calendrierId?: number | null): Promise<Activite> {
-    await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
+    if (!createDto.forceCreate) {
+      await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
+    }
     const activite = this.activiteRepo.create({ ...createDto, userId, calendrierId: calendrierId ?? null });
     return this.activiteRepo.save(activite);
   }
@@ -107,7 +109,9 @@ export class ProgrammableService {
     }
     const dateDepart = attrs.dateDepart ?? activite.dateDepart;
     const dureeHeures = attrs.dureeHeures ?? activite.dureeHeures;
-    await this.checkChevauchement(activite.userId, dateDepart, dureeHeures, id);
+    if (!attrs.forceCreate) {
+      await this.checkChevauchement(activite.userId, dateDepart, dureeHeures, id);
+    }
     Object.assign(activite, attrs);
     return this.activiteRepo.save(activite);
   }
