@@ -5,12 +5,18 @@ import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UserDTO } from './dtos/user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
+import { CurrentUser } from './decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
 
     constructor(private service: UsersService) { }
 
+
+    @Get("friends")
+    getFriends(@CurrentUser() user: User){
+        return this.service.getFriends(user.id)
+    }
 
     @Serialize(UserDTO)
     @Get("/:id")
@@ -29,5 +35,7 @@ export class UsersController {
     getAllUsers() {
         return this.service.findAll()
     }
+
+   
 
 }

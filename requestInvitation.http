@@ -5,8 +5,8 @@ content-type: application/json
 {
   "type": "AMI",
   "senderId": 1,
-  "invitedUserId": 2,
-  "amiId": -1
+  "invitedUserId": 4,
+  "amiId": 3
 }
 ### Get toutes les invitations
 GET http://localhost:3000/invitation

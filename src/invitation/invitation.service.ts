@@ -6,17 +6,21 @@ import { CreateInvitationDto } from './dtos/create-invitation.dto';
 import { UpdateInvitationDto } from './dtos/update-invitation.dto';
 import { InvitationStatut } from './enums/invitation-statut.enum';
 import { InvitationFactory } from "./factory/invitation.factory";
-
 import { ProgrammableService } from '../programmable/programmable.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class InvitationService {
     constructor(
     @InjectRepository(Invitation)
     private invitationRepository: Repository<Invitation>,
+
     private invitationFactory: InvitationFactory
+
     ,@Inject(forwardRef(() => ProgrammableService))
     private readonly programmableService: ProgrammableService,
+
+    private readonly usersService: UsersService,
     ){}
 
     async findAll(){
@@ -24,7 +28,7 @@ export class InvitationService {
     }
 
     async findOne(id: number){
-        const invitation = await this.invitationRepository.findOne({where:{id}})
+        const invitation = await this.invitationRepository.findOne({where:{id}, relations: ["sender", "invitedUser"]})
         if(!invitation){
             throw new NotFoundException(`Invitation avec l'id ${id} est inexistante`)
         }
@@ -33,13 +37,15 @@ export class InvitationService {
 
     async getMyInvitations(userId: number) {
         return this.invitationRepository.find({
-          where: { invitedUserId: userId }
+          where: { invitedUserId: userId },
+          relations: ["sender"],
         });
       }
 
       async getSentInvitations(userId: number) {
         return this.invitationRepository.find({
-          where: { senderId: userId }
+          where: { senderId: userId },
+          relations: ["invitedUser"],
         });
       }
 
@@ -72,6 +78,20 @@ export class InvitationService {
                 invitation.invitedUserId, 
                 invitation.senderId
             );
+        }
+
+        if (invitation.type === 'AMI'){
+            const sender = await this.usersService.findUserWithFriends(invitation.senderId);
+            const receiver = await this.usersService.findUserWithFriends(invitation.invitedUserId);
+            if(!sender || !receiver){
+                throw new NotFoundException("User introuvable");
+            }
+            
+            sender.friends.push(receiver);
+            receiver.friends.push(sender);
+
+            await this.usersService.save(sender);
+            await this.usersService.save(receiver);
         }
 
 
