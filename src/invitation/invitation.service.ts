@@ -6,17 +6,21 @@ import { CreateInvitationDto } from './dtos/create-invitation.dto';
 import { UpdateInvitationDto } from './dtos/update-invitation.dto';
 import { InvitationStatut } from './enums/invitation-statut.enum';
 import { InvitationFactory } from "./factory/invitation.factory";
-
 import { ProgrammableService } from '../programmable/programmable.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class InvitationService {
     constructor(
     @InjectRepository(Invitation)
     private invitationRepository: Repository<Invitation>,
+
     private invitationFactory: InvitationFactory
+
     ,@Inject(forwardRef(() => ProgrammableService))
     private readonly programmableService: ProgrammableService,
+
+    private readonly usersService: UsersService,
     ){}
 
     async findAll(){
@@ -74,6 +78,20 @@ export class InvitationService {
                 invitation.invitedUserId, 
                 invitation.senderId
             );
+        }
+
+        if (invitation.type === 'AMI'){
+            const sender = await this.usersService.findUserWithFriends(invitation.senderId);
+            const receiver = await this.usersService.findUserWithFriends(invitation.invitedUserId);
+            if(!sender || !receiver){
+                throw new NotFoundException("User introuvable");
+            }
+            
+            sender.friends.push(receiver);
+            receiver.friends.push(sender);
+
+            await this.usersService.save(sender);
+            await this.usersService.save(receiver);
         }
 
 

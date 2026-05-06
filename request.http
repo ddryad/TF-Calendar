@@ -28,6 +28,10 @@ GET http://localhost:3000/auth/whoami
 ### Logout
 POST http://localhost:3000/auth/signout
 
+### get amis
+GET http://localhost:3000/users/friends
+
+
 ### GET ONE User BY ID
 GET http://localhost:3000/users/1
 

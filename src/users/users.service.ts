@@ -70,4 +70,19 @@ export class UsersService {
         return await this.usersRepository.save(user)
     }
 
+    async findUserWithFriends(id: number){
+        return this.usersRepository.findOne({where: {id: id}, relations: ["friends"],});
+        
+    }
+    
+    async getFriends(userId: number){
+        const user =  await this.usersRepository.findOne({where: { id:userId}, relations: ["friends"],});
+
+        return user?.friends || [];
+    }
+
+    async save(user: User){
+        return this.usersRepository.save(user);
+    }
+
 }

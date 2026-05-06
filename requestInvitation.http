@@ -3,10 +3,10 @@ POST http://localhost:3000/invitation
 content-type: application/json
 
 {
-  "type": "ACTIVITE",
-  "senderId": 3,
-  "invitedUserId": 1,
-  "activiteId": 1
+  "type": "AMI",
+  "senderId": 1,
+  "invitedUserId": 4,
+  "amiId": 3
 }
 ### Get toutes les invitations
 GET http://localhost:3000/invitation
