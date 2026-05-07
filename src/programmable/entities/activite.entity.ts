@@ -13,7 +13,7 @@ export class Activite extends Programmable {
   dureeHeures: number;
 
   @Column({
-    type: 'varchar',
+    type: 'enum', // CHANGED from 'varchar' to 'enum' to fix MySQL syntax
     enum: NiveauPriorite,
     default: NiveauPriorite.IMPORTANCE_MOYENNE,
   })

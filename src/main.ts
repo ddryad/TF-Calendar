@@ -14,7 +14,7 @@ async function bootstrap() {
     credentials: true,                 // allow cookies
   });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true, forbidNonWhitelisted: true }))
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.BACKEND_PORT ?? 3000);
   console.log("http://localhost:3000")
 }
 bootstrap();
