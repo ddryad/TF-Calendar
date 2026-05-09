@@ -21,7 +21,7 @@ export class Invitation {
     @JoinColumn({name: "invitedUserId"})
     invitedUser: User;
 
-    @Column({ type: 'enum', enum: InvitationStatut }) // FIXED: Changed 'text' to 'enum'
+    @Column({ type: 'varchar', enum: InvitationStatut })
     statut: InvitationStatut;
 
     @Column()
