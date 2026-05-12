@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { Repository, In } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDTO } from './dtos/create-user.dto';
+import { Like } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -83,6 +84,17 @@ export class UsersService {
 
     async save(user: User){
         return this.usersRepository.save(user);
+    }
+
+    async searchUsers(query: string){
+        return this.usersRepository.find({
+            where:[{nomComplet: Like(`%${query}%`)},
+                {
+                    email: Like(`%${query}%`)
+                }
+            ],
+            take: 5,
+        });
     }
 
 }

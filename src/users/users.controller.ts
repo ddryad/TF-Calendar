@@ -1,4 +1,4 @@
-import { Controller, Body, Post, Patch, Param, Get, Session, UseGuards, Req } from '@nestjs/common';
+import { Controller, Body, Post, Patch, Param, Get, Session, UseGuards, Req, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
@@ -16,6 +16,10 @@ export class UsersController {
     @Get("friends")
     getFriends(@CurrentUser() user: User){
         return this.service.getFriends(user.id)
+    }
+    @Get("search")
+    searchUsers(@Query("query") query: string){
+        return this.service.searchUsers(query);
     }
 
     @Serialize(UserDTO)
