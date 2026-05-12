@@ -17,5 +17,6 @@ export class Activite extends Programmable {
     enum: NiveauPriorite,
     default: NiveauPriorite.IMPORTANCE_MOYENNE,
   })
+
   priorite: NiveauPriorite;
 }
