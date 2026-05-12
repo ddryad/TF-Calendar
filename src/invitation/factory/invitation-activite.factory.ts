@@ -4,8 +4,8 @@ import { IInvitationFactory } from "./invitation-interface.factory";
 import { CreateInvitationDto } from "../dtos/create-invitation.dto";
 export class InvitationActiviteFactory implements IInvitationFactory {
   create(data: CreateInvitationDto): Partial<Invitation> {
-    if (!data.activiteId){
-      throw new BadRequestException("activite ID requis");
+    if (!data.activiteId && !data.activiteGroupeId){
+      throw new BadRequestException("activite ID ou activite ID requis");
     }
 
     return {
@@ -13,6 +13,7 @@ export class InvitationActiviteFactory implements IInvitationFactory {
       invitedUserId: data.invitedUserId,
       type: "ACTIVITE",
       activiteId: data.activiteId,
+      activiteGroupeId: data.activiteGroupeId,
     };
   }
 }
