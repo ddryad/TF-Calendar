@@ -4,6 +4,7 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@n
 import { ProgrammableService } from 'src/programmable/programmable.service';
 import { CourDto } from './dtos/cour.dto';
 import { Activite, NiveauPriorite } from 'src/programmable/entities/activite.entity';
+import { CategorieProgrammable } from 'src/programmable/categorie.enum';
 
 
 @Injectable()
@@ -54,6 +55,7 @@ export class OmnivoxService {
                         dateDepart: new Date(cour.dateDepart),
                         dureeHeures: cour.dureeHeures,
                         priorite: NiveauPriorite.IMPORTANCE_MOYENNE,
+                        categorie: CategorieProgrammable.COURS,
                         forceCreate: true,
                     },
                     userId,

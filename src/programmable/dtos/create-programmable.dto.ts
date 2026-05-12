@@ -1,4 +1,5 @@
-import { IsDateString, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { CategorieProgrammable } from '../categorie.enum';
 
 export class CreateProgrammableDto {
   @IsString()
@@ -12,4 +13,9 @@ export class CreateProgrammableDto {
   @IsDateString()
   @IsNotEmpty()
   dateDepart: Date;
+
+ 
+  @IsEnum(CategorieProgrammable)
+  @IsOptional()
+  categorie?: CategorieProgrammable;
 }
