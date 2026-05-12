@@ -32,7 +32,7 @@ export class OmnivoxService {
             }
  
             throw new HttpException(
-                `Omnivox service error: ${detail}`,
+                `Omnivox service error: ${JSON.stringify(detail)}`,
                 status
             );
         }
@@ -54,6 +54,7 @@ export class OmnivoxService {
                         dateDepart: new Date(cour.dateDepart),
                         dureeHeures: cour.dureeHeures,
                         priorite: NiveauPriorite.IMPORTANCE_MOYENNE,
+                        forceCreate: true,
                     },
                     userId,
                     calendrierId ?? null,

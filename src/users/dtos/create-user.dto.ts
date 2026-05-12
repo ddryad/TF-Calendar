@@ -15,7 +15,7 @@ export class CreateUserDTO{
     @IsOptional()
     nomComplet?: string
 
-    @IsString()
+    @IsNumber()
     @IsOptional()
     omnivoxDA?: number
 

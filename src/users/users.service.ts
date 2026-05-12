@@ -65,7 +65,11 @@ export class UsersService {
             throw new NotFoundException(`Utilisateur avec id ${id} est inexistant`)
         }
 
-        user = Object.assign(user, attrs)
+        const { omnivoxPassword, ...rest } = attrs as any;
+        Object.assign(user, rest);
+        if (omnivoxPassword) {
+            user.omnivoxPasswordHash = omnivoxPassword;
+        }
 
         return await this.usersRepository.save(user)
     }
