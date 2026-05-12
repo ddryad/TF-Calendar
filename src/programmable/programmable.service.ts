@@ -157,7 +157,7 @@ export class ProgrammableService {
     return activiteGroupe;
   }
 
-  async ajouterParticipant(activiteGroupeId: number, participantId: number, userId: number): Promise<ActiviteGroupe> {
+  async ajouterParticipant(activiteGroupeId: number, participantId: number, userId: number, force = false): Promise<ActiviteGroupe> {
     const activiteGroupe = await this.trouverActiviteGroupeAvecParticipants(activiteGroupeId, userId);
 
     const dejaPresent = activiteGroupe.participants.some(p => p.id === participantId);
@@ -166,8 +166,23 @@ export class ProgrammableService {
     }
 
     const participant = await this.usersService.findOneUser(participantId);
-    await this.checkChevauchement(participant.id, activiteGroupe.dateDepart, activiteGroupe.dureeHeures);
-
+    try {
+      await this.checkChevauchement(
+        participant.id,
+        activiteGroupe.dateDepart,
+        activiteGroupe.dureeHeures
+      );
+    } catch (e: any) {
+  
+      if (!force) {
+        throw new ConflictException({
+          isConflict: true,
+          message: e.message
+        });
+      }
+  
+      // si force = true → on ignore le conflit
+    }
     activiteGroupe.participants.push(participant);
     return this.activiteGroupeRepo.save(activiteGroupe);
   }

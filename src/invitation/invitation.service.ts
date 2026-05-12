@@ -64,7 +64,7 @@ export class InvitationService {
         return this.invitationRepository.save(invitation);
     }
 
-    async acceptInvitation(id: number, userId: number){
+    async acceptInvitation(id: number, userId: number, force = false){
         const invitation  = await this.findOne(id)
 
         if (invitation.invitedUserId !== userId){
@@ -76,7 +76,9 @@ export class InvitationService {
             await this.programmableService.ajouterParticipant(
                 invitation.activiteGroupeId, 
                 invitation.invitedUserId, 
-                invitation.senderId
+                invitation.senderId,
+                force
+
             );
         }
 

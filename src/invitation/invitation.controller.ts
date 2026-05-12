@@ -49,8 +49,8 @@ export class InvitationController {
    }
 
    @Patch(':id/accept') // accepte l'invitation
-   accept(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User ){
-    return this.invitationService.acceptInvitation(id, user.id);
+   accept(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User, @Body('force') force: boolean ){
+    return this.invitationService.acceptInvitation(id, user.id, force);
    }
  
    @Patch(':id/refuse') // refuse l'invitation 
