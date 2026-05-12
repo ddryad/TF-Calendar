@@ -43,7 +43,19 @@ export class ProgrammableService {
   }
 
   async findAllByUser(userId: number): Promise<Programmable[]> {
-    return this.programmableRepo.find({ where: { userId } });
+    // programmables créés par l'utilisateur
+  const programmables = await this.programmableRepo.find({
+    where: { userId },
+  });
+
+  // activités de groupe où l'utilisateur est participant
+  const activitesGroupes = await this.activiteGroupeRepo
+    .createQueryBuilder("activite")
+    .leftJoinAndSelect("activite.participants", "participant")
+    .where("participant.id = :userId", { userId })
+    .getMany();
+
+  return [...programmables, ...activitesGroupes];
   }
 
   async createEvenement(createDto: CreateEvenementDto, userId: number, calendrierId?: number | null): Promise<Evenement> {
@@ -60,7 +72,9 @@ export class ProgrammableService {
   }
 
   async createActiviteGroupe(createDto: CreateActiviteGroupeDto, userId: number, calendrierId?: number | null): Promise<ActiviteGroupe> {
-    await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
+    if (!createDto.forceCreate){
+      await this.checkChevauchement(userId, createDto.dateDepart, createDto.dureeHeures);
+    }
 
     const participants = await this.usersService.findByIds(createDto.participantIds);
 

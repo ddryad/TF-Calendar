@@ -1,9 +1,10 @@
 import { CreateActiviteDto } from './create-activite.dto';
-import { IsNumber, IsArray } from 'class-validator';
+import { IsNumber, IsArray, IsOptional } from 'class-validator';
 
 export class CreateActiviteGroupeDto extends CreateActiviteDto {
+    @IsOptional()
     @IsNumber()
-    groupeId: number;
+    groupeId?: number;
 
     @IsArray()
     @IsNumber({}, { each: true })
